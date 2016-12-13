@@ -1,0 +1,33 @@
+#content  {
+    padding-top: 30px;
+}
+
+.left  {
+    height: 100%;
+    float: left;
+    position: absolute;
+}
+
+#menu  {
+    border-radius: 0.5em;
+    background-color:  #F3F3F3;
+    width: 300px;
+    text-align: center;
+    border: 1px solid #D0D0D0;
+    box-shadow: 4px 4px 3px #888888;
+}
+
+#menu .items  {
+    text-align: left;
+}
+
+.body  {
+    margin-left: 320px;
+    float: left;
+}
+
+#footer  {
+    padding-top: 50px;
+    clear: both;
+    text-align: center;
+}

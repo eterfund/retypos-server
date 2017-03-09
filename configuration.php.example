@@ -1,6 +1,10 @@
 <?php
-$db_name = 'eterfund_typos';
-$db_host = 'mysql';
-$db_user = 'eterfund';
-$db_pass = 'passwd';
+
+// Настройки подключения к базе данных
+const DB_DRIVER   = 'mysql';
+const DB_DATABASE = 'eterfund_typos';
+const DB_HOSTNAME = 'localhost';
+const DB_USERNAME = 'eterfund';
+const DB_PASSWORD = 'helloworldpassword';
+
 ?>

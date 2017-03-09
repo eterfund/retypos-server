@@ -9,6 +9,7 @@ header('Access-Control-Allow-Origin: *');
 require_once('configuration.php');
 require_once('functions.php');
 require_once('language.php');
+require_once('constants.php');
 
 /*Начинаем сессию*/
 if (!session_id()) {
@@ -23,10 +24,10 @@ $userdata = array(
 	'comment' 		=> '',
 	'old_browser'	=> 0
 );
-$code_language = DEFAULT_LANGUAGE;
+$code_language = DEFAULT_LANGUAGE;	
 
 /*Определяем какой язык использовать (или же оставляем по-умолчанию)*/
-if (in_array(getRequest('language', 'ru'), $LANGUAGES)) {
+if (in_array(getRequest('language', 'ru'), $_language)) {
 	$code_language = getRequest('language', 'ru');
 }
 
@@ -45,6 +46,7 @@ if ($last_time_activity) {
 try {
 	$DBH = new PDO(DB_DRIVER.":host=".DB_HOSTNAME.";dbname=".DB_DATABASE, DB_USERNAME, DB_PASSWORD, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''));
 } catch (PDOException $e) {
+	error_log($e);
 	echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_connect_database']));
 	return false;
 }
@@ -75,6 +77,8 @@ if (!isset($mas_url['host'])) {
  * - отправка писем
 **********************************/
 
+error_log("Host = {$mas_url["host"]}");
+
 /*Достаем номер сайта и email-ы пользователей*/
 try {
 	$query_emails =  "SELECT r.id_site AS id_site,
@@ -89,7 +93,7 @@ try {
 									AND r.status = '1')
 						AND r.id_user = u.id";
 	$STH = $DBH->prepare($query_emails);
-	$STH->execute(array($mas_url["host"]));
+	$STH->execute(array($mas_url["scheme"]."://".$mas_url["host"]));
 	if ($STH->rowCount() > 0) {
 		$email_users = array();
 		while ($row = $STH->fetch(PDO::FETCH_ASSOC))  {
@@ -102,6 +106,7 @@ try {
 		$email_users = false;
 	}
 } catch (PDOException $e) {
+	error_log($e);
 	echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]["error_support_site"]));
 	return;
 }

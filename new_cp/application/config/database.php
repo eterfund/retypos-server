@@ -74,12 +74,12 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
+	'dsn'	=> 'mysql:host=localhost; dbname=barbass_typos_new; charset=utf8;',
 	'hostname' => 'localhost',
 	'username' => 'ambulance',
 	'password' => 'ambulanceetersoft',
 	'database' => 'barbass_typos_new',
-	'dbdriver' => 'mysql',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

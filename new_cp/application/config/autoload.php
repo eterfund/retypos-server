@@ -132,4 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('mdl_views', 'mdl_post', 'mdl_query', 'mdl_search', 'mdl_session', 'mdl_authorized', 'mdl_menu');
+$autoload['model'] = array();

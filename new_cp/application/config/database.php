@@ -73,13 +73,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
+// Default group can be loaded by $this->load->database()
 $db['default'] = array(
-	'dsn'	=> '',
+	'dsn'	=> 'mysql:host=localhost; dbname=barbass_typos_new; charset=utf8;',
 	'hostname' => 'localhost',
 	'username' => 'ambulance',
 	'password' => 'ambulanceetersoft',
 	'database' => 'barbass_typos_new',
-	'dbdriver' => 'mysql',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

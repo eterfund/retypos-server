@@ -22,7 +22,7 @@ class Authorization extends CI_Controller {
         $this->data['auth_url'] = $this->config->base_url()."authorization/check";
         $this->view_name = 'authorization/index';
         
-        $this->load->model('user');
+        $this->load->model('userHelper');
     }
     
     function index()  {
@@ -61,8 +61,8 @@ class Authorization extends CI_Controller {
             }
         }
         
-        $user_info = $this->user->getUser($username);
-        $password = $this->user->hashPassword($password);
+        $user_info = $this->userHelper->getUser($username);
+        $password = $this->userHelper->hashPassword($password);
 
         echo var_dump($user_info);
         

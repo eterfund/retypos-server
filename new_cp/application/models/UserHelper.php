@@ -5,7 +5,7 @@
  *
  * @author george popoff <ambulance@etersoft.ru>
  */
-class User extends CI_Model
+class UserHelper extends CI_Model
 {
     /**
      * Retrieve user by given username

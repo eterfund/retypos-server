@@ -44,6 +44,8 @@ class Users extends CI_Controller {
     
     /*Получить пользователей*/
     function get_list_users()  {
+        error_log("get_list_users");
+        
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);
         $data['sord'] = $this->input->get('sord');
@@ -58,6 +60,8 @@ class Users extends CI_Controller {
     
     /*Получить сайты пользователя*/
     function get_user_sites() {
+        log_message('error', 'get_user_states');
+        
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);
         $data['sord'] = $this->input->get('sord');
@@ -76,6 +80,8 @@ class Users extends CI_Controller {
         $oper = $this->input->post('oper');
         $data = array();
         
+        log_message('error', 'panel_users');
+        log_message('error', "Oper = $oper");
         if  ($oper == 'add')  {
             $data['login'] = $this->input->post('login');
             if  (strlen($data['login']) < 3)  {
@@ -129,6 +135,7 @@ class Users extends CI_Controller {
             return;
         }  else if ($oper == 'del')  {
                 $data['id_user'] = $this->input->post('id');
+                log_message('error', "DELETE USSER!!!!!");
                 $this->user->deleteUser($data);
                 return;
         }  else if ($oper == 'edit')  {
@@ -192,16 +199,14 @@ class Users extends CI_Controller {
     //Возвращать должен html-список
     function get_sites()  {
         $id_user = $this->input->get('id_user');
-        $sites = $this->user->getUserSites($id_user);
-        
-        log_message("error", "result!!!");
+        $sites = $this->user->getAvailableSites($id_user);
         
         $select = "<select>";
-        if  (!$sites)  {
+        if  ($sites->num_rows() == 0)  {
             $select .= "<option disabled selected value='-1'>Сайтов нет</option>";
         }  else  {
-            for ($i=0; $i<count($sites); $i++)  {
-                $select .= "<option value='".$sites[$i]['id']."'>".$sites[$i]['site']."</option>";
+            foreach ($sites->result() as $site) {
+                $select .= "<option value='".$site->id."'>".$site->site."</option>";
             }
         }
         $select .= "</select>";
@@ -213,28 +218,33 @@ class Users extends CI_Controller {
     /*Управление сайтами пользователя*/
     function panel_users_site()  {
         $oper = $this->input->post('oper');
+        
         if ($oper == 'add')  {
-            $data['id_user'] = $this->input->post('id_user');
+            $data['id_user'] = $this->input->get('id_user');
             $data['id_site'] = $this->input->post('site'); 
             $data['status'] = $this->input->post('status');
+            
             if  ($data['status'] != 1 && $data['status'] != 0)  {
                 $data['status']  = 0;
             }
+            
             $return = $this->user->addResponsible($data);
+            
             if ($return)  {
                 echo json_encode($return);
             }
         } else if  ($oper == 'edit')  {
-            $data['id_user'] = $this->input->post('id_user');
+            $data['id_user'] = $this->input->get('id_user');
             $data['id_site'] = $this->input->post('id');
             $data['status'] = $this->input->post('status');
-            $data['status'] = $this->input->post('status');
+            
             if  ($data['status'] != 1 && $data['status'] != 0)  {
                 $data['status']  = 0;
             }
+            
             $this->user->editResponsible($data);
         }  else if ($oper == 'del')  {
-            $data['id_user'] = $this->input->post('id_user');
+            $data['id_user'] = $this->input->get('id_user');
             $data['id_site'] = $this->input->post('id');
             $this->user->deleteResponsible($data);
         }

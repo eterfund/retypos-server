@@ -113,7 +113,7 @@ class Sites extends CI_Controller {
         $oper = $this->input->post('oper');
         if  ($oper == 'del')  {
             $this->load->model('admins/user');
-            $data['id_user'] = $this->input->get('id');
+            $data['id_user'] = $this->input->post('id');
             $data['id_site'] = $this->input->get('id_site');
             $this->user->deleteResponsible($data);
         }

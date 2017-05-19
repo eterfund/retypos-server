@@ -17,7 +17,7 @@ class Typo extends CI_Model {
         $login_id = isset($data["login_id"]) ? $data["login_id"] : 0;
         
         if ( $table == "messages") {
-            if (!$this->get_right_site($data)) {
+            if (!$this->getSiteRights($data)) {
                 return array();
             }
         }
@@ -50,14 +50,16 @@ class Typo extends CI_Model {
                             FROM `messages` AS m
                             JOIN users AS u
                             JOIN responsible AS r ON r.id_user=u.id
-                            WHERE m.id_site = '" . $id_site . "'
+                            WHERE m.site_id = '" . $id_site . "'
                                 AND u.id = '" . $login_id . "'
-                                AND r.id_site = m.id_site 
+                                AND r.id_site = m.site_id 
                                 AND r.id_user = u.id";
         }
         
         $count = $this->db->query($query_count)->num_rows();
 
+        log_message("error", "messages count = $count");
+        
         if ($count > 0) {
             $total_pages = ceil($count / $limit);
         } else {
@@ -79,16 +81,14 @@ class Typo extends CI_Model {
         /* ЗАПРОС */
 
         if ( $table == "messages" ) {
-            $this->db->select("m.id as id, m.link as link, m.error_text as text "
-                    . "m.comment as comment, m.date as date, m.status as status");
-            $this->db->from("messages as m");
-            $this->db->join("users as u");
-            $this->db->join("responsible as r", "r.id_user = u.id");
-            $this->db->where("m.id_site", $id_site);
+            $this->db->select("m.id as message_id, m.link as link, m.text as text, "
+                    . "m.comment as comment, m.date as message_date, m.status as message_status, u.*");
+            $this->db->from("messages as m, users as u");
+            $this->db->join("responsible as r", "r.id_user = u.id AND"
+                    . " r.id_site = m.site_id AND r.id_user = u.id");
+            $this->db->where("m.site_id", $id_site);
             $this->db->where("u.id", $login_id);
-            $this->db->where("r.id_site", "m.id_site");
-            $this->db->where("r.id_user", "u.id");
-            
+
 //            $query_string = "SELECT m.id AS id, 
 //                                m.link AS link, 
 //                                m.error_text AS text, 
@@ -105,7 +105,7 @@ class Typo extends CI_Model {
 //                                ORDER BY $sidx $sord 
 //                                LIMIT $start , $limit";
         } else {
-            $this->db->select("s.id as id, s.site as site, s.status as status, u.*");
+            $this->db->select("s.id as site_id, s.site as site, s.status as status, u.*");
             $this->db->from("sites as s, users as u");
             $this->db->join("responsible as r", "r.id_user = u.id AND r.id_site = s.id");
             $this->db->where("u.id", $login_id);
@@ -129,22 +129,24 @@ class Typo extends CI_Model {
         
         $results = $this->db->get();
         
+        log_message("error", $this->db->last_query());
+        
         if ( $table == 'sites') {
             foreach( $results->result() as $id => $row ) {
-                $data['rows'][$id]['id']     = $row->id;
-                $data['rows'][$id]['cell'][] = $row->id;
+                $data['rows'][$id]['id']     = $row->site_id;
+                $data['rows'][$id]['cell'][] = $row->site_id;
                 $data['rows'][$id]['cell'][] = $row->site;
                 $data['rows'][$id]['cell'][] = $row->status;
             }
         } else if ( $table == 'messages' ) {
             foreach( $results->result() as $id => $row ) {
-                $data['rows'][$id]['id'] = $row->id;
-                $data['rows'][$id]['cell'][] = $row->id;
+                $data['rows'][$id]['id'] = $row->message_id;
+                $data['rows'][$id]['cell'][] = $row->message_id;
                 $data['rows'][$id]['cell'][] = anchor($row->link, 'ссылка', array('class' => 'typos_link', 'target' => '_blank'));;
                 $data['rows'][$id]['cell'][] = $row->text;
                 $data['rows'][$id]['cell'][] = $row->comment;
-                $data['rows'][$id]['cell'][] = $row->date;
-                $data['rows'][$id]['cell'][] = $row->status;
+                $data['rows'][$id]['cell'][] = $row->message_date;
+                $data['rows'][$id]['cell'][] = $row->message_status;
             }
         }
         
@@ -216,13 +218,7 @@ class Typo extends CI_Model {
 
     /* Узнать права на сайт */
 
-    function getSiteRights($data) {
-        $query = "SELECT r.id_site AS id_site
-                    FROM responsible AS r
-                    JOIN users AS u ON u.id = r.id_user
-                    WHERE u.id = '" . $data['login_id'] . "'
-                        AND r.id_site = '" . $data['id_site'] . "' ";
-        
+    function getSiteRights($data) {      
         $this->db->select("r.id_site");
         $this->db->from("responsible as r");
         $this->db->join("users as u", "u.id = r.id_user");
@@ -230,6 +226,7 @@ class Typo extends CI_Model {
         $this->db->where("r.id_site", $data['id_site']);
         
         $row = $this->db->count_all_results();
+        
         if ($row) {
             return true;
         } else {

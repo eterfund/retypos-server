@@ -63,6 +63,8 @@ class Typos extends CI_Controller {
     
     /*Получить список сообщений об опечатках для пользователя*/
     function get_list_messages()  {
+        log_message("debug", "get_list_messages()");
+        
         $data['id_site'] = $this->input->get("id");
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);

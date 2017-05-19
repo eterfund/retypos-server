@@ -117,7 +117,7 @@ try {
 if ($email_users) {
     try {
         $data = array('NULL', $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['comment'], 0);
-        $STH = $DBH->prepare("INSERT INTO messages (id, id_site, link, error_text, comment, datetime, status) VALUES (?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
+        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, comment, date, status) VALUES (?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
         $STH->execute($data);
     } catch (PDOException $e) {
         echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_database']));

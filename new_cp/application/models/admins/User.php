@@ -25,8 +25,6 @@ class User extends CI_Model {
     private function filterResults($table, $data) {
         $this->load->helper("search");
         
-        log_message('error', "data = " . print_r($data, true));
-        
         $id_user = isset($data['id_user']) ? $data['id_user'] : 0;
         $page = isset($data['page']) ? $data['page'] : 0;
         $limit = isset($data['limit']) ? $data['limit'] : 0;
@@ -101,8 +99,6 @@ class User extends CI_Model {
         }
         
         $results = $this->db->get();
-        
-        log_message('error', $this->db->last_query());
         
         if ( $table == 'users') {
             foreach( $results->result() as $id => $row ) {
@@ -204,11 +200,9 @@ class User extends CI_Model {
     
     /*Удаляем пользователя*/
     function deleteUser($data)  {
-        log_message('error', print_r($data, true));
         $this->db->where('id', $data['id_user']);
         $this->db->delete('users');
         
-        log_message('error', $this->db->last_query());
         
         $this->db->where('id', $data['id_user']);
         $this->db->delete('responsible');
@@ -216,8 +210,6 @@ class User extends CI_Model {
     
     /*Снимаем ответсвенного*/
     function deleteResponsible($data)  {
-        log_message('error', 'deleteResponsible with data = ');
-        log_message('error', print_r($data, true));
         
         $this->db->where('id_site', $data['id_site']);
         $this->db->where('id_user', $data['id_user']);
@@ -233,8 +225,6 @@ class User extends CI_Model {
         
         
         $this->db->update('responsible');
-        
-        log_message('error', $this->db->last_query());
     }
     
     /*Проверяем логин на уникальность*/

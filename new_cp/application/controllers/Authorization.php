@@ -30,6 +30,8 @@ class Authorization extends CI_Controller {
     }
     
     function check()  {
+        log_message("error", "login action");
+        
         if  (!$this->check_login_error())  {
             
             $this->data['error_message'] = "Вы превысили число попыток";
@@ -39,6 +41,8 @@ class Authorization extends CI_Controller {
 
         $username = $this->input->post('username');
         $password = $this->input->post('password');
+        
+        log_message("error", "username = $username");
         
         if  ($username == "" || $password == "")  {
             $this->data['error_message'] = "Логин/пароль пустой";
@@ -63,8 +67,6 @@ class Authorization extends CI_Controller {
         
         $user_info = $this->userHelper->getUser($username);
         $password = $this->userHelper->hashPassword($password);
-
-        echo var_dump($user_info);
         
         if (!$user_info)  {
                 $this->error_login();
@@ -73,6 +75,9 @@ class Authorization extends CI_Controller {
                 return;
         }  else  {
             if  ($password == $user_info->password)  {
+                
+                log_message("info", "hello world");
+                
                 if  (intval($user_info->activity) == 1)  {
                     $loginData = array(
                         'login'      => $username,
@@ -108,7 +113,7 @@ class Authorization extends CI_Controller {
         
         unset($_SESSION);
         
-        redirect ("authorized");
+        redirect ("authorization");
     }
     
     /*Устанавливаем счетчики ошибок входа*/

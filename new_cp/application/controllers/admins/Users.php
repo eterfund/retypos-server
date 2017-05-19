@@ -14,6 +14,7 @@ class Users extends CI_Controller {
         
         $this->login_id = $this->session->login_id;
         $this->usertype = $this->session->usertype;
+        
         if  ($this->usertype != 'admin')  {
             redirect('users/typos');
         }
@@ -44,8 +45,6 @@ class Users extends CI_Controller {
     
     /*Получить пользователей*/
     function get_list_users()  {
-        error_log("get_list_users");
-        
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);
         $data['sord'] = $this->input->get('sord');
@@ -60,8 +59,7 @@ class Users extends CI_Controller {
     
     /*Получить сайты пользователя*/
     function get_user_sites() {
-        log_message('error', 'get_user_states');
-        
+       
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);
         $data['sord'] = $this->input->get('sord');
@@ -80,8 +78,6 @@ class Users extends CI_Controller {
         $oper = $this->input->post('oper');
         $data = array();
         
-        log_message('error', 'panel_users');
-        log_message('error', "Oper = $oper");
         if  ($oper == 'add')  {
             $data['login'] = $this->input->post('login');
             if  (strlen($data['login']) < 3)  {
@@ -135,7 +131,6 @@ class Users extends CI_Controller {
             return;
         }  else if ($oper == 'del')  {
                 $data['id_user'] = $this->input->post('id');
-                log_message('error', "DELETE USSER!!!!!");
                 $this->user->deleteUser($data);
                 return;
         }  else if ($oper == 'edit')  {

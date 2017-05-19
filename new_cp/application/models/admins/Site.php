@@ -19,7 +19,6 @@ class Site extends CI_Model {
     }
     
     private function filterResults($table, $data) {
-        log_message('error', "data = " . print_r($data, true));
         $this->load->helper("search");
                 
         $id_site = isset($data['id_site']) ? $data['id_site'] : 0;
@@ -123,8 +122,6 @@ class Site extends CI_Model {
         if (!$this->isSiteUnique($site['site']))  {
             return array('message' => 'Сайт не уникален');
         }
-        
-        log_message("error", "here");
         
         $data = array(
           'site' => $site['site'],

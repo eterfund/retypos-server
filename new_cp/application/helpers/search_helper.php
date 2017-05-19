@@ -18,11 +18,7 @@
  */
 function searchString($field, $operator, $string) {
         $s = " $field ";
-        
-        log_message('debug', $field);
-        log_message('debug', $operator);
-        log_message('debug', $string);
-        
+     
         if ( $field == "" ) {
             return false;
         }
@@ -81,6 +77,5 @@ function searchString($field, $operator, $string) {
             break;
         }
         
-        log_message('debug', 'return ' . $s);
         return $s;
 }

@@ -75,7 +75,6 @@ class Sites extends CI_Controller {
     /*Управление сайтами*/
     function panel_sites()  {
         $oper = $this->input->post('oper');
-        log_message('error', "oper = $oper");
         
         if  ($oper == 'add')  { // Добавление пользователя
             $data['site'] = $this->input->post('site');

@@ -15,7 +15,9 @@ class UserHelper extends CI_Model
      */
     public function getUser($username) {
         $query = $this->db->query("SELECT * FROM users WHERE login = '".$username."' LIMIT 1");
-        return $query->row();
+        $row = $query->row(0);
+        
+        return $row;
     }
     
     /**

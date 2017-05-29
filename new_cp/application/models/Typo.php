@@ -129,8 +129,6 @@ class Typo extends CI_Model {
         
         $results = $this->db->get();
         
-        log_message("error", $this->db->last_query());
-        
         if ( $table == 'sites') {
             foreach( $results->result() as $id => $row ) {
                 $data['rows'][$id]['id']     = $row->site_id;
@@ -199,6 +197,7 @@ class Typo extends CI_Model {
     /* Удаляем сообщение */
 
     function deleteMessage($data) {
+        
         if ($this->getMessageRights($data)) {
             $this->db->where("id", $data['id_message']);
             $this->db->delete("messages");
@@ -238,16 +237,16 @@ class Typo extends CI_Model {
 
     function getMessageRights($data) {
         $this->db->select("m.id");
-        $this->db->from("messages as m");
-        $this->db->join("sites as s", "m.id_site = s.id");
-        $this->db->join("users as u");
-        $this->db->join("responsible as r", "r.id_user = u.id");
+        $this->db->from("messages as m, users as u");
+        $this->db->join("sites as s", "m.site_id = s.id");
+        $this->db->join("responsible as r", "r.id_user = u.id AND r.id_site = s.id");
         $this->db->where("m.id", $data['id_message']);
         $this->db->where("u.id", $data['login_id']);
-        $this->db->where("r.id_site", "s.id");
         $this->db->where("s.id", $data['id_site']);
         
         $rows = $this->db->count_all_results();
+        
+        log_message("error", "count message rights: {$this->db->last_query()}");
         if ($rows) {
             return true;
         } else {

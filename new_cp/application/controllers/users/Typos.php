@@ -102,7 +102,7 @@ class Typos extends CI_Controller {
     /*Управление сообщениями*/
     function panel_messages()  {
         
-        $oper = $this->input->get('oper');
+        $oper = $this->input->post('oper');
         
         $data = array();
         
@@ -119,7 +119,8 @@ class Typos extends CI_Controller {
             
             $this->typo->addMessage($data);
         }  else if  ($oper == 'del')  {
-            $data['id_message'] = $this->input->get('id');
+            log_message("error", "panel_messages");
+            $data['id_message'] = $this->input->post('id');
             $data['id_site'] = $this->input->get('id_site');
             $data['login_id'] = $this->login_id;
             

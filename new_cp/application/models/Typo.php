@@ -210,8 +210,10 @@ class Typo extends CI_Model {
         if ($this->getMessageRights($data)) {
             $this->db->set("status", $data['status']);
             $this->db->where("id", $data['id_message']);
-            $this->db->where("id_site", $data['id_site']);
+            $this->db->where("site_id", $data['id_site']);
             $this->db->update("messages");
+            
+            log_message("error", "editMessage: {$this->db->last_query()}");
         }
     }
 
@@ -245,8 +247,7 @@ class Typo extends CI_Model {
         $this->db->where("s.id", $data['id_site']);
         
         $rows = $this->db->count_all_results();
-        
-        log_message("error", "count message rights: {$this->db->last_query()}");
+        log_message("error", "getMessageRights: {$this->db->last_query()}");
         if ($rows) {
             return true;
         } else {

@@ -119,23 +119,22 @@ class Typos extends CI_Controller {
             
             $this->typo->addMessage($data);
         }  else if  ($oper == 'del')  {
-            log_message("error", "panel_messages");
             $data['id_message'] = $this->input->post('id');
             $data['id_site'] = $this->input->get('id_site');
             $data['login_id'] = $this->login_id;
             
             $this->typo->deleteMessage($data);
         }  else if  ($oper == 'edit')  {
-            $data['id_message'] = $this->input->get('id');
+            $data['id_message'] = $this->input->post('id');
             $data['id_site'] = $this->input->get('id_site');
-            $data['status'] = $this->input->get('status');
+            $data['status'] = $this->input->post('status');
             
             $data['login_id'] = $this->login_id;
             if  ($data['status'] != 0 && $data['status'] != 1)  {
                 $data['status'] = 0;
             }
             
-            $this->typo->editMessages($data);
+            $this->typo->editMessage($data);
         }
     }
 

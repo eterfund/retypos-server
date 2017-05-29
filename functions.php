@@ -122,7 +122,7 @@ function validate() {
 	}
 	
 	if (strlen(getRequest('comment', '')) > 30) {
-		$error = sprintf($_language[$code_language]["error_text"], strlen(getRequest('text', '')));
+		$error = sprintf($_language[$code_language]["error_text"], 0, 30, strlen(getRequest('comment', '')));
 		return false;
 	}
 	return true;

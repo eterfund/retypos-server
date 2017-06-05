@@ -23,7 +23,7 @@ $_language['ru']['mail_error'] = "Ошибка при отправлении п�
 $_language['ru']['mail_site'] = "Сайт:";
 $_language['ru']['mail_url'] = "Ссылка:";
 $_language['ru']['mail_click_url'] = "нажмите";
-$_language['ru']['mail_comment'] = "Комментарий:";
+$_language['ru']['mail_comment'] = "Предложенное исправление:";
 $_language['ru']['mail_text'] = "Текст с опечаткой:";
 
 ?>

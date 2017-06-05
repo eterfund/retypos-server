@@ -35,7 +35,7 @@ jQuery("#table_sites").jqGrid({ //Привязка плагина к табли�
             url: TYPOS.base_url+'users/typos/get_list_messages?id='+row_id,
             editurl: TYPOS.base_url+'users/typos/panel_messages?id_site='+row_id+'&id='+row_id,
             datatype: "json",
-            colNames: ['Номер', 'Ссылка', 'Текст', 'Комментарий', 'Дата добавления', 'Статус сообщения'],
+            colNames: ['Номер', 'Ссылка', 'Текст', 'Исправление', 'Дата добавления', 'Принято?'],
             colModel: [
                 {name:"id",index:"m.id",width:80, searchtype:"integer", align:'center'},
                 {name:"link",index:"m.link",width:80, sortable:false, searchtype:"string", align:'center', editable:true},

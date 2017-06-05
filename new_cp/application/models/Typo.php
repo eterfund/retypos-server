@@ -208,6 +208,10 @@ class Typo extends CI_Model {
 
     function editMessage($data) {
         if ($this->getMessageRights($data)) {
+            if ( $data['status'] ) {
+                correctTypo($data["id_message"]);
+            }
+            
             $this->db->set("status", $data['status']);
             $this->db->where("id", $data['id_message']);
             $this->db->where("site_id", $data['id_site']);
@@ -252,7 +256,57 @@ class Typo extends CI_Model {
             return false;
         }
     }
+    
+    /**
+     * Отправляет запрос на исправление ошибки на сервер
+     * 
+     * @param type $message_id 
+     *      Номер сообщения в бд
+     */
+    function correctTypo($message_id) {
+        /* TODO: брать из конфига */
+        $correctPath = "correctTypo";
+        $authToken = "fksdjsdlfks";
+        
+        /* Получаем исправление */
+        $this->db->select("m.link as link, m.text as text, m.comment as comment");
+        $this->db->from("messages as m");
+        $this->db->where("m.id", $message_id);
+        
+        $correction = $this->db->get();
+        
+        /* Получаем адрес необходимого сайта */
+        $parsed_url = parse_url($correction->link);
+        
+        // Адресс на который шлем запрос исправления
+        $url = $parsed_url["scheme"] + "://" + $parsed_url["host"] + "/" + $correctPath;
+        
+        /* Посылаем запрос с помощью cUrl */
+        $curl = curl_init($url);
+        
+        curl_setopt_array($curl, array(
+            CURLOPT_USE_SSL => true, 
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_FAILONERROR => true,
+            CURLOPT_USERNAME => "typos.etersoft",
+            CURLOPT_PASSWORD => $authToken,
+            CURLOPT_POSTFIELDS => array(
+                text => $correction->text,
+                corrected => $correction->comment,
+                link => $correction->link
+            ),
+        ));
 
+        if ( ($res = curl_exec($curl)) === false ) {
+            error_log("CorrectTypo error: " + curl_error($curl));
+            return;
+        } 
+        
+        log_message("debug", $res);
+        
+        curl_close($curl);
+    }
 }
 
 /**/

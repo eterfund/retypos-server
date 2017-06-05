@@ -212,8 +212,6 @@ class Typo extends CI_Model {
             $this->db->where("id", $data['id_message']);
             $this->db->where("site_id", $data['id_site']);
             $this->db->update("messages");
-            
-            log_message("error", "editMessage: {$this->db->last_query()}");
         }
     }
 

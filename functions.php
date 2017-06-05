@@ -116,13 +116,13 @@ function validate() {
 		return false;
 	}
 	
-	if (strlen(getRequest('text', '')) < 5 || strlen(getRequest('text', '')) > 30) {
-		$error = sprintf($_language[$code_language]["error_text"], 5, 30, strlen(getRequest('text', '')));
+	if (mb_strlen(getRequest('text', '')) < 5 || mb_strlen(getRequest('text', '')) > 30) {
+		$error = sprintf($_language[$code_language]["error_text"], 5, 30, mb_strlen(getRequest('text', '')));
 		return false;
 	}
 	
-	if (strlen(getRequest('comment', '')) > 30) {
-		$error = sprintf($_language[$code_language]["error_text"], 0, 30, strlen(getRequest('comment', '')));
+	if (mb_strlen(getRequest('comment', '')) > 30) {
+		$error = sprintf($_language[$code_language]["error_text"], 0, 30, mb_strlen(getRequest('comment', '')));
 		return false;
 	}
 	return true;

@@ -11,3 +11,8 @@ $config['pass']['key_3'] = "&^^%$%$*Gposwорапо7д";
 
 $config['error_login_count'] = 3;
 $config['error_login_time'] = 600; //10 минут
+
+/* Typos credentials for external apis */
+$config['correction_path'] = "correctTypo";
+$config['typos_user'] = 'typos.etersoft';
+$config['typos_password'] = 'Ync~YC{jBamlfuw7N3kG?XkiMpn}l6YJ';

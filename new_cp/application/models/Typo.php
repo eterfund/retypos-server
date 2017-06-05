@@ -209,7 +209,7 @@ class Typo extends CI_Model {
     function editMessage($data) {
         if ($this->getMessageRights($data)) {
             if ( $data['status'] ) {
-                correctTypo($data["id_message"]);
+                $this->correctTypo($data["id_message"]);
             }
             
             $this->db->set("status", $data['status']);
@@ -264,22 +264,25 @@ class Typo extends CI_Model {
      *      Номер сообщения в бд
      */
     function correctTypo($message_id) {
+        xdebug_break();
+        
         /* TODO: брать из конфига */
-        $correctPath = "correctTypo";
-        $authToken = "fksdjsdlfks";
+        $correctPath = $this->config->item("correction_path");
+        $authToken = $this->config->item("typos_password");
+        $username = $this->config->item("typos_user");
         
         /* Получаем исправление */
         $this->db->select("m.link as link, m.text as text, m.comment as comment");
         $this->db->from("messages as m");
         $this->db->where("m.id", $message_id);
         
-        $correction = $this->db->get();
+        $correction = $this->db->get()->row();
         
         /* Получаем адрес необходимого сайта */
         $parsed_url = parse_url($correction->link);
         
         // Адресс на который шлем запрос исправления
-        $url = $parsed_url["scheme"] + "://" + $parsed_url["host"] + "/" + $correctPath;
+        $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
         
         /* Посылаем запрос с помощью cUrl */
         $curl = curl_init($url);
@@ -289,21 +292,24 @@ class Typo extends CI_Model {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST => true,
             CURLOPT_FAILONERROR => true,
-            CURLOPT_USERNAME => "typos.etersoft",
+            CURLOPT_USERNAME => $username,
             CURLOPT_PASSWORD => $authToken,
             CURLOPT_POSTFIELDS => array(
-                text => $correction->text,
-                corrected => $correction->comment,
-                link => $correction->link
+                'text' => $correction->text,
+                'corrected' => $correction->comment,
+                'link' => $correction->link
             ),
         ));
 
-        if ( ($res = curl_exec($curl)) === false ) {
-            error_log("CorrectTypo error: " + curl_error($curl));
-            return;
-        } 
+        log_message("debug", "sending request to $url");
         
-        log_message("debug", $res);
+        if ( !($res = curl_exec($curl)) ) {
+            log_message("debug", "CorrectTypo error: " . curl_error($curl));
+            return;
+        }
+        
+        log_message("debug", "response taken");
+        log_message("debug", "Response from $url: $res");
         
         curl_close($curl);
     }

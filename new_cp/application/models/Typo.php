@@ -140,11 +140,11 @@ class Typo extends CI_Model {
             foreach( $results->result() as $id => $row ) {
                 $data['rows'][$id]['id'] = $row->message_id;
                 $data['rows'][$id]['cell'][] = $row->message_id;
+                $data['rows'][$id]['cell'][] = $row->message_status;
                 $data['rows'][$id]['cell'][] = anchor($row->link, 'ссылка', array('class' => 'typos_link', 'target' => '_blank'));;
                 $data['rows'][$id]['cell'][] = $row->text;
                 $data['rows'][$id]['cell'][] = $row->comment;
                 $data['rows'][$id]['cell'][] = $row->message_date;
-                $data['rows'][$id]['cell'][] = $row->message_status;
             }
         }
         

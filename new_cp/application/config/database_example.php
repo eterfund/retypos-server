@@ -75,11 +75,11 @@ $query_builder = TRUE;
 
 // Default group can be loaded by $this->load->database()
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=localhost; dbname=barbass_typos_new; charset=utf8;',
-	'hostname' => 'localhost',
+	'dsn'	=> 'mysql:host=hostname; dbname=database; charset=utf8;',
+	'hostname' => 'hostname',
 	'username' => 'ambulance',
-	'password' => 'ambulanceetersoft',
-	'database' => 'barbass_typos_new',
+	'password' => 'password',
+	'database' => 'database',
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

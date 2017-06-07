@@ -264,8 +264,6 @@ class Typo extends CI_Model {
      *      Номер сообщения в бд
      */
     function correctTypo($message_id) {
-        xdebug_break();
-        
         /* TODO: брать из конфига */
         $correctPath = $this->config->item("correction_path");
         $authToken = $this->config->item("typos_password");

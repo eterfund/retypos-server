@@ -100,7 +100,9 @@ try {
     
     $STH->debugDumpParams();
     
-    $query = ob_end_clean();
+    $query = ob_get_contents();
+    
+    ob_end_clean();
     
     error_log("query: $query");
     

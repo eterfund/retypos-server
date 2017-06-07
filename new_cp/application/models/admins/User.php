@@ -78,10 +78,11 @@ class User extends CI_Model {
             $start = 0;
         }
         
-        $this->db->select('*');
         if ( $table == 'users' ) {
+            $this->db->select('*');
             $this->db->from('users as u');
         } else {
+            $this->db->select('r.*, s.*, r.status as responsible_status');
             $this->db->from('responsible as r');
             $this->db->join('sites as s', $join_on);
         }
@@ -116,10 +117,11 @@ class User extends CI_Model {
             }
         } else if ( $table == 'responsible' ) {
             foreach( $results->result() as $id => $row ) {
+                log_message("debug", "row dump: " . print_r($row, true));
                 $data['rows'][$id]['id'] = $row->id;
                 $data['rows'][$id]['cell'][] = $row->id;
                 $data['rows'][$id]['cell'][] = $row->site;
-                $data['rows'][$id]['cell'][] = $row->status;
+                $data['rows'][$id]['cell'][] = $row->responsible_status;
                 $data['rows'][$id]['cell'][] = $row->date;
             }
         }
@@ -219,12 +221,15 @@ class User extends CI_Model {
     
     /*Обновляем статус*/
     function editResponsible($data)  {
+        log_message("debug", "EditResponsible!");
         $this->db->set('status', $data['status']);
         $this->db->where('id_site', $data['id_site']);
         $this->db->where('id_user', $data['id_user']);
         
         
         $this->db->update('responsible');
+        
+        log_message("debug", "query: {$this->db->last_query()}");
     }
     
     /*Проверяем логин на уникальность*/

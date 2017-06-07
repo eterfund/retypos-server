@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://ambulance.sandbox.eterhost.ru/typos.server/new_cp/';
+$config['base_url'] = 'http://eterfund.ru/api/typos/new_cp/';
 
 /*
 |--------------------------------------------------------------------------

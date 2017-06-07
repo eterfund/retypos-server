@@ -144,6 +144,7 @@ if ($email_users) {
         return;
     }
 } else {
+    error_log("No active users for {$mas_url['host']}");
     echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_support_site']));
     return;
 }

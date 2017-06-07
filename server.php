@@ -96,16 +96,6 @@ try {
     
     $STH = $DBH->prepare($query_emails);
     
-    ob_start();
-    
-    $STH->debugDumpParams();
-    
-    $query = ob_get_contents();
-    
-    ob_end_clean();
-    
-    error_log("query: $query");
-    
     $STH->execute(array($mas_url["scheme"] . "://" . $mas_url["host"]));
     if ($STH->rowCount() > 0) {
         $email_users = array();

@@ -95,6 +95,15 @@ try {
         AND r.id_user = u.id";
     
     $STH = $DBH->prepare($query_emails);
+    
+    ob_start();
+    
+    $STH->debugDumpParams();
+    
+    $query = ob_end_clean();
+    
+    error_log("query: $query");
+    
     $STH->execute(array($mas_url["scheme"] . "://" . $mas_url["host"]));
     if ($STH->rowCount() > 0) {
         $email_users = array();
@@ -144,7 +153,7 @@ if ($email_users) {
         return;
     }
 } else {
-    error_log("No active users for {$mas_url['host']}");
+    error_log("No active users for {$mas_url["scheme"]}://{$mas_url["host"]}");
     echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_support_site']));
     return;
 }

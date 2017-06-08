@@ -13,8 +13,8 @@
 <script type="text/javascript">
 
 jQuery("#table_sites").jqGrid({ // Привязка плагина к таблице
-   	url: TYPOS.base_url+'admins/sites/get_list_sites', // Скрипт - обработчик ваших запросов
-   	editurl: TYPOS.base_url+'admins/sites/panel_sites',
+   	url: '<?=$base_ur?>admins/sites/get_list_sites', // Скрипт - обработчик ваших запросов
+   	editurl: '<?=$base_ur?>admins/sites/panel_sites',
    	datatype: "json", // Формат скрипта-обработчика
    	colNames:['Номер', 'Сайт', 'Дата регистрации'],
    	colModel:[
@@ -30,8 +30,8 @@ jQuery("#table_sites").jqGrid({ // Привязка плагина к табли
 		pager_id = "p_"+subgrid_table_id;
 		$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
 		jQuery("#"+subgrid_table_id).jqGrid({
-			url: TYPOS.base_url+'admins/sites/get_list_users?id='+row_id,
-			editurl: TYPOS.base_url+'admins/sites/panel_users?id='+row_id+'&id_site='+row_id,
+			url: '<?=$base_ur?>admins/sites/get_list_users?id='+row_id,
+			editurl: '<?=$base_ur?>admins/sites/panel_users?id='+row_id+'&id_site='+row_id,
 			datatype: "json",
 			colNames: ['Номер', 'Логин', 'Тип', 'Email', 'Имя', 'Отчество', 'Фамилия', 'Статус аккаунта', 'Подписка', 'Дата установки'],
 			colModel: [

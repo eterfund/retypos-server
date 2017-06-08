@@ -13,8 +13,8 @@
 <script type="text/javascript">
 
 jQuery("#table_users").jqGrid({ // Привязка плагина к таблице
-   	url: TYPOS.base_url+'admins/users/get_list_users', // Скрипт - обработчик ваших запросов
-   	editurl: TYPOS.base_url+'admins/users/panel_users',
+   	url: '<?=$base_url?>admins/users/get_list_users', // Скрипт - обработчик ваших запросов
+   	editurl: '<?=$base_url?>admins/users/panel_users',
    	datatype: "json", // Формат скрипта-обработчика
    	colNames: ['Номер', 'Логин', 'Тип', 'Email', 'Пароль', 'Имя', 'Отчество', 'Фамилия', 'Статус аккаунта','Дата регистрации'],
 			colModel: [
@@ -37,13 +37,13 @@ jQuery("#table_users").jqGrid({ // Привязка плагина к табли
 		pager_id = "p_"+subgrid_table_id;
 		$("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
 		jQuery("#"+subgrid_table_id).jqGrid({
-			url: TYPOS.base_url+'admins/users/get_user_sites?id='+row_id,
-			editurl: TYPOS.base_url+'admins/users/panel_users_site?id='+row_id+'&id_user='+row_id,
+			url: '<?=$base_url?>admins/users/get_user_sites?id='+row_id,
+			editurl: '<?=$base_url?>admins/users/panel_users_site?id='+row_id+'&id_user='+row_id,
 			datatype: "json",
             colNames:['Номер', 'Сайт', 'Статус', 'Дата установки'],
    	        colModel:[
                 {name:"id", index:'r.id_site', width:10, searchtype:"integer", align:'center'},
-                {name:"site", index:'s.site', align:'center', width:120, searchtype:"string", edittype:'select', editable:true,  editoptions:{dataUrl:TYPOS.base_url+'admins/users/get_sites?id_user='+row_id}},
+                {name:"site", index:'s.site', align:'center', width:120, searchtype:"string", edittype:'select', editable:true,  editoptions:{dataUrl:'<?=$base_url?>admins/users/get_sites?id_user='+row_id}},
                 {name:"status", index:'r.status', align:'center', width:20, searchtype:"string", editable:true, edittype:"checkbox", editoptions: {value:"1:0", defaultValue:'1'}, formatter:'checkbox'},
                 {name:"date", index:"r.date", width:80, sortable:true, searchtype:"string", align:'center'},
    	        ],

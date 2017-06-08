@@ -14,8 +14,8 @@
 <script type="text/javascript">
 
 jQuery("#table_sites").jqGrid({ //Привязка плагина к таблице
-    url: TYPOS.base_url+'users/typos/get_list_sites', //Получить список сайтов пользователя
-    editurl: TYPOS.base_url+'users/typos/panel_sites',
+    url: '<?=$base_url?>users/typos/get_list_sites', //Получить список сайтов пользователя
+    editurl: '<?=$base_url?>users/typos/panel_sites',
     datatype: "json", //Формат скрипта-обработчика
     colNames:['Номер', 'Сайт', 'Подписан'],
     colModel:[
@@ -32,8 +32,8 @@ jQuery("#table_sites").jqGrid({ //Привязка плагина к табли�
         pager_id = "p_"+subgrid_table_id;
         $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>");
         jQuery("#"+subgrid_table_id).jqGrid({
-            url: TYPOS.base_url+'users/typos/get_list_messages?id='+row_id,
-            editurl: TYPOS.base_url+'users/typos/panel_messages?id_site='+row_id+'&id='+row_id,
+            url: '<?=$base_url?>users/typos/get_list_messages?id='+row_id,
+            editurl: '<?=$base_url?>users/typos/panel_messages?id_site='+row_id+'&id='+row_id,
             datatype: "json",
             colNames: ['Номер', 'Принято?', 'Ссылка', 'Текст', 'Исправление', 'Дата добавления'],
             colModel: [

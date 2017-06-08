@@ -89,14 +89,17 @@ try {
             SELECT r.id
             FROM responsible AS r
             JOIN sites AS s
-            WHERE s.site = ?
+            WHERE s.site REGEXP ?
             AND r.id_site = s.id
             AND r.status = '1')
         AND r.id_user = u.id";
     
     $STH = $DBH->prepare($query_emails);
     
-    $STH->execute(array($mas_url["scheme"] . "://" . $mas_url["host"]));
+    // 08.06.17: supports every protocol
+    // ^(https?://)*(www.)*etersoft.com/?$
+    $STH->execute(array("^(https?://)*(www.)*" . $mas_url["host"] . "/?$"));
+    
     if ($STH->rowCount() > 0) {
         $email_users = array();
         while ($row = $STH->fetch(PDO::FETCH_ASSOC)) {

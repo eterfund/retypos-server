@@ -179,6 +179,13 @@ switch (ENVIRONMENT)
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
 
+/**
+ * Define APP_URL Dynamically
+ *
+ * Automatic base url
+ */
+define('APP_URL', ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http') . "://{$_SERVER['SERVER_NAME']}".str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])); 
+
 
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
@@ -313,10 +320,3 @@ switch (ENVIRONMENT)
  * And away we go...
  */
 require_once BASEPATH.'core/CodeIgniter.php';
-
-/**
- * Define APP_URL Dynamically
- *
- * Automatic base url
- */
-define('APP_URL', ($_SERVER['SERVER_PORT'] == 443 ? 'https' : 'http') . "://{$_SERVER['SERVER_NAME']}".str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'])); 

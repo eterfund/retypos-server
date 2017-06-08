@@ -4,7 +4,6 @@
         <meta charset="utf-8" />
         <title>TYPOS@ETERSOFT - Сервис опечаток</title>
         <!--Скрипты и стили-->
-        <script src="<?=$base_url;?>javascript/typos.config.js" type="text/javascript"></script>
         <script src="<?=$base_url;?>javascript/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
   
         <script src="<?=$base_url;?>javascript/jquery_plugins/jquery-ui/1.8.23.custom/js/jquery-ui-1.8.23.custom.min.js" type="text/javascript"></script>

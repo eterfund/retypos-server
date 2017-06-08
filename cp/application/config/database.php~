@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 // Default group can be loaded by $this->load->database()
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=mysql; dbname=eterfund_typos; charset=utf8;',
+	'dsn'	=> 'mysql:host=mysql.eterhost.ru; dbname=eterfund_typos; charset=utf8;',
 	'hostname' => 'mysql',
 	'username' => 'eterfund',
 	'password' => 'yEnHwGY5LEcR3R4a',

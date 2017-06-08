@@ -1,0 +1,8 @@
+<?php>
+const DB_DRIVER   = 'mysql';
+const DB_DATABASE = 'eterfund_typos';
+const DB_HOSTNAME = 'mysql';
+const DB_USERNAME = 'eterfund';
+const DB_PASSWORD = 'yEnHwGY5LEcR3R4a';
+
+

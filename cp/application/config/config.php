@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$config['base_url'] = 'http://eterfund.ru/api/typos/cp/';
+$config['base_url'] = '//eterfund.ru/api/typos/cp/';
 
 /*
 |--------------------------------------------------------------------------

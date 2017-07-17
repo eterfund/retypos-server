@@ -82,7 +82,7 @@ class Typo extends CI_Model {
 
         if ( $table == "messages" ) {
             $this->db->select("m.id as message_id, m.link as link, m.text as text, "
-                    . "m.comment as comment, m.date as message_date, m.status as message_status, u.*");
+                    . "m.comment as comment, m.context as context, m.date as message_date, m.status as message_status, u.*");
             $this->db->from("messages as m, users as u");
             $this->db->join("responsible as r", "r.id_user = u.id AND"
                     . " r.id_site = m.site_id AND r.id_user = u.id");
@@ -141,9 +141,14 @@ class Typo extends CI_Model {
                 $data['rows'][$id]['id'] = $row->message_id;
                 $data['rows'][$id]['cell'][] = $row->message_id;
                 $data['rows'][$id]['cell'][] = $row->message_status;
-                $data['rows'][$id]['cell'][] = anchor($row->link, 'ссылка', array('class' => 'typos_link', 'target' => '_blank'));;
+                $data['rows'][$id]['cell'][] = anchor($row->link, 'ссылка', array('class' => 'typos_link', 'target' => '_blank'));
                 $data['rows'][$id]['cell'][] = $row->text;
                 $data['rows'][$id]['cell'][] = $row->comment;
+                $data['rows'][$id]['cell'][] = anchor("#", 'показать',
+                        array('class' => 'typos_context',
+                            'onclick'=> 'return Typos.handleLink(this);',
+                            'typo' => $row->text, 'context' => $row->context,
+                            'correct' => $row->comment));
                 $data['rows'][$id]['cell'][] = $row->message_date;
             }
         }

@@ -31,3 +31,7 @@
     clear: both;
     text-align: center;
 }
+
+.typo {
+    background-color: rgba(200, 200, 10, 0.2);
+}

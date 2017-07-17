@@ -22,6 +22,7 @@ $error = '';
 $userdata = array(
     'url' => '',
     'text' => '',
+    'context' => '',
     'comment' => '',
     'old_browser' => 0
 );
@@ -62,6 +63,7 @@ $userdata['old_browser'] = getRequest('old_browser', 0);
 $userdata['comment'] = htmlspecialchars(rawurldecode(getRequest('comment', '')));
 $userdata['url'] = getFormatingUrl(rawurldecode(getRequest('url', '')));
 $userdata['text'] = htmlspecialchars(rawurldecode(getRequest('text', '')));
+$userdata['context'] = htmlspecialchars(rawurldecode(getRequest('context', '')));
 
 /* Парсим сайт для получения коренного сайта */
 $mas_url = parse_url($userdata['url']);
@@ -120,8 +122,8 @@ try {
 /* Если активных пользователей за сайт нет, то возвращаем сообщение об ошибке */
 if ($email_users) {
     try {
-        $data = array('NULL', $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['comment'], 0);
-        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, comment, date, status) VALUES (?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
+        $data = array('NULL', $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['comment'], 0);
+        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
         $STH->execute($data);
     } catch (PDOException $e) {
         echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_database']));
@@ -131,8 +133,9 @@ if ($email_users) {
     $message_email = "<p>" . $_language[$code_language]['mail_site'] . " <a href=" . $mas_url["scheme"] . "://" . $mas_url["host"] . ">" . $mas_url["scheme"] . "://" . $mas_url["host"] . "</a></p>";
     $message_email .= "<p>" . $_language[$code_language]['mail_url'] . " <a href=" . htmlspecialchars($userdata['url']) . ">" . $_language[$code_language]['mail_click_url'] . "</a>" . " (" . $userdata['url'] . ")" . "</p>";
     $message_email .= "<p>" . $_language[$code_language]['mail_text'] . " " . htmlspecialchars($userdata['text']) . "</p>";
+    $message_email .= "<p>" . $_language[$code_language]['mail_context'] . " " . htmlspecialchars($userdata['context']) . "</p>";
     $message_email .= "<p>" . $_language[$code_language]['mail_comment'] . " " . htmlspecialchars($userdata['comment']) . "</p>";
-
+    
     $subject = '=?utf-8?B?' . base64_encode($_language[$code_language]['mail_subject']) . '?=';
 
     $to = toEmail($email_users);

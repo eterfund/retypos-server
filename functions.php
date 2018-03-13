@@ -154,7 +154,9 @@ function getFormatingUrl($url) {
 	}
 	
 	//заменить протокол на нижний регистр: hTtP -> http
-	$url = preg_replace("~^[a-z]+~ie","strtolower('\\0')", $url);
+	$url = preg_replace_callback("|^[a-z]+|i", function (array $matches) {
+		return strtolower($matches[0]);
+	}, $url);
 	
 	return $url;
 }

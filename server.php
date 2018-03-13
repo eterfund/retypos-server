@@ -80,8 +80,6 @@ if (!isset($mas_url['host'])) {
  * - отправка писем
  * ******************************** */
 
-error_log("Host = {$mas_url["host"]}");
-
 /* Достаем номер сайта и email-ы пользователей */
 try {
     $query_emails = "SELECT r.id_site AS id_site,
@@ -132,10 +130,10 @@ if ($email_users) {
 
     $message_email = "<p>" . $_language[$code_language]['mail_site'] . " <a href=" . $mas_url["scheme"] . "://" . $mas_url["host"] . ">" . $mas_url["scheme"] . "://" . $mas_url["host"] . "</a></p>";
     $message_email .= "<p>" . $_language[$code_language]['mail_url'] . " <a href=" . htmlspecialchars($userdata['url']) . ">" . $_language[$code_language]['mail_click_url'] . "</a>" . " (" . $userdata['url'] . ")" . "</p>";
-    $message_email .= "<p>" . $_language[$code_language]['mail_text'] . " " . htmlspecialchars($userdata['text']) . "</p>";
-    $message_email .= "<p>" . $_language[$code_language]['mail_context'] . " " . htmlspecialchars($userdata['context']) . "</p>";
-    $message_email .= "<p>" . $_language[$code_language]['mail_comment'] . " " . htmlspecialchars($userdata['comment']) . "</p>";
-    
+    $message_email .= "<p>{$_language[$code_language]['mail_text']}: <i>{$userdata['text']}</i></p>";
+    $message_email .= "<p>{$_language[$code_language]['mail_comment']}: <i>{$userdata['comment']}</i></p>";
+    $message_email .= "<p>{$_language[$code_language]['mail_context']}: \"{$userdata['context']}\"</p>";
+
     $subject = '=?utf-8?B?' . base64_encode($_language[$code_language]['mail_subject']) . '?=';
 
     $to = toEmail($email_users);

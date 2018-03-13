@@ -20,11 +20,10 @@ $_language['ru']['mail_subject'] = "Сообщение об опечатке";
 $_language['ru']['mail_from'] = "Служба опечаток Etersoft";
 $_language['ru']['mail_error'] = "Ошибка при отправлении письма";
 
-$_language['ru']['mail_site'] = "Сайт:";
-$_language['ru']['mail_url'] = "Ссылка:";
+$_language['ru']['mail_site'] = "Сайт";
+$_language['ru']['mail_url'] = "Ссылка";
 $_language['ru']['mail_click_url'] = "нажмите";
-$_language['ru']['mail_comment'] = "Предложенное исправление:";
-$_language['ru']['mail_comment'] = "Контекст:";
-$_language['ru']['mail_text'] = "Текст с опечаткой:";
-
+$_language['ru']['mail_comment'] = "Предложенное исправление";
+$_language['ru']['mail_context'] = "Контекст";
+$_language['ru']['mail_text'] = "Текст с опечаткой";
 ?>

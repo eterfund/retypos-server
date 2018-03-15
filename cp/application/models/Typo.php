@@ -308,8 +308,9 @@ class Typo extends CI_Model {
 
         log_message("debug", "sending request to $url");
         
-        if ( !($res = curl_exec($curl)) ) {
-            log_message("debug", "CorrectTypo error: " . curl_error($curl));
+        if ( !($res = curl_exec($curl)) && curl_errno($curl) != 0 ) {
+            log_message("debug", "CorrectTypo errorCode: " . curl_errno($curl));
+            log_message("debug", "CorrectTypo errorText: " . curl_error($curl));
             return;
         }
         

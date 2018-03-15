@@ -11,7 +11,7 @@
 *************************************/
 
 /*Отправка email-ов*/
-function sendMail($subject,$body, $to, $from_email, $from_name, $type = 'plain')  {
+function sendMail($subject,$body, $to, $from_email, $from_name, $reply_to, $type = 'plain')  {
 	$headers = "X-PHP-Script: ".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]." for ".$_SERVER['SERVER_ADDR']."\r\n";
 	$headers .= "MIME-Version: 1.0\r\n";
 	$headers .= "Return-path: <".$from_email.">\r\n";
@@ -21,6 +21,7 @@ function sendMail($subject,$body, $to, $from_email, $from_name, $type = 'plain')
 	$headers .= "X-MSMail-Priority: Normal\r\n";
 	$headers .= "X-Mailer: Automatic PHP Script\r\n";
 	$headers .= "From:".$from_name."<".$from_email.">\r\n";
+    $headers .= "Reply-To: $reply_to\r\n";
 
 	if (mail($to, $subject, $body, $headers)) {
 		return true;

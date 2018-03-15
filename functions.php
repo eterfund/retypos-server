@@ -43,6 +43,16 @@ function toEmail($data) {
 	return $to;
 }
 
+function getControlPanelUrl() {
+	$protocol = isset($_SERVER['HTTPS']) ? "https" : "http";
+	$path = explode("/", $_SERVER["REQUEST_URI"]);
+
+	// Убираем скрипт из пути
+	$path = $path[1];
+
+	return "$protocol://$_SERVER[HTTP_HOST]/$path/cp/";
+}
+
 /*Проверяем хэдеры на "человечость"*/
 function checkHeader() {
 	if (	empty($_SERVER['HTTP_ACCEPT']) ||

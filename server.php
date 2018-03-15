@@ -1,7 +1,10 @@
 <?php
 
 /* 	Цель: Скрипт обработки опечаток
- * 	автор: barbass@
+ * 	авторы:
+ *      barbass@etersoft.ru
+ *      ambulance@etersoft.ru
+ *
  * 	дата: 2012-04-24
  */
 

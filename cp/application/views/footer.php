@@ -2,7 +2,7 @@
         </div>
         
         <footer id="footer">
-            <p>Copyright (c) barbass 2012</p>
+            <p>Copyright (c) etersoft 2017</p>
         </footer>
     
     </body>

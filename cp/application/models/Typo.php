@@ -178,6 +178,8 @@ class Typo extends CI_Model {
         } else {
             return false;
         }
+
+        return true;
     }
 
     /* Добавляем новое сообщение */
@@ -190,7 +192,7 @@ class Typo extends CI_Model {
             "link"      => $data['link'],
             "error_text"   => $data['error_text'],
             "comment"   => $data['comment'],
-            "date"      => $date('Y-m-d H:i:s', time()),
+            "date"      => $data('Y-m-d H:i:s', time()),
             "status"    => $data['status'],
         ];
 
@@ -265,7 +267,7 @@ class Typo extends CI_Model {
     /**
      * Отправляет запрос на исправление ошибки на сервер
      * 
-     * @param type $message_id 
+     * @param integer $message_id
      *      Номер сообщения в бд
      */
     function correctTypo($message_id) {

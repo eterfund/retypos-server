@@ -48,9 +48,11 @@ function getControlPanelUrl() {
 	$path = explode("/", $_SERVER["REQUEST_URI"]);
 
 	// Убираем скрипт из пути
-	$path = $path[1];
+	array_pop($path);
 
-	return "$protocol://$_SERVER[HTTP_HOST]/$path/cp/";
+	$path = implode("/", $path);
+
+	return "$protocol://$_SERVER[HTTP_HOST]$path/cp/";
 }
 
 /*Проверяем хэдеры на "человечость"*/

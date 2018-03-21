@@ -44,7 +44,6 @@ function toEmail($data) {
 }
 
 function getControlPanelUrl() {
-	$protocol = isset($_SERVER['HTTPS']) ? "https" : "http";
 	$path = explode("/", $_SERVER["REQUEST_URI"]);
 
 	// Убираем скрипт из пути
@@ -52,7 +51,7 @@ function getControlPanelUrl() {
 
 	$path = implode("/", $path);
 
-	return "$protocol://$_SERVER[HTTP_HOST]$path/cp/";
+	return "https://$_SERVER[HTTP_HOST]$path/cp/";
 }
 
 /*Проверяем хэдеры на "человечость"*/

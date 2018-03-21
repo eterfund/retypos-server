@@ -21,7 +21,7 @@ $_language['ru']['mail_from'] = "Служба опечаток Etersoft";
 $_language['ru']['mail_error'] = "Ошибка при отправлении письма";
 
 $_language['ru']['mail_site'] = "Сайт";
-$_language['ru']['mail_url'] = "Ссылка";
+$_language['ru']['mail_url'] = "Ссылка на статью";
 $_language['ru']['mail_cp_link'] = "Перейти в панель управления опечатками";
 $_language['ru']['mail_click_url'] = "нажмите";
 $_language['ru']['mail_comment'] = "Предложенное исправление";

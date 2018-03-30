@@ -5,6 +5,26 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*Работа с опечатками - пользователь*/
 class Typos extends CI_Controller {
 
+    /* @var $session CI_Session */
+    public $session;
+
+    /* @var $config CI_Config */
+    public $config;
+
+    /* @var $input CI_Input */
+    protected $input;
+
+    /* @var $typo Typo */
+    public $typo;
+
+    /* user id */
+    private $login_id;
+
+    private $header_name;
+    private $view_name;
+    private $menu_name;
+    private $footer_name;
+
     function __construct()  {
         parent::__construct();
         

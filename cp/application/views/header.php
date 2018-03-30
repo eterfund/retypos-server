@@ -16,9 +16,6 @@
     <body>
     
     <!-- Шапка -->
-    <div id="head">
-        <h3> TYPOS </h3>
-    </div>
-    
-        <div id="page">
-            <div id="content">
+    <header id="head">
+        <h1> TYPOS@ETERSOFT - Сервис опечаток </h1>
+    </header>

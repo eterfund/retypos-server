@@ -1,6 +1,7 @@
 <div class="left">
     <div id="menu">
         <span class="heading">Меню</span>
+        <hr>
         <div class="items">
             <ul>
                 <?php  

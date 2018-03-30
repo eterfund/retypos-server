@@ -24,7 +24,7 @@ function menu_admin($baseUrl)  {
  * @return string
  */
 function menu_user($baseUrl)  {
-    $data['typos'] = "<a href='".$baseUrl."index.php/users/typos'>Опечатки</a>";
+    //$data['typos'] = "<a href='".$baseUrl."index.php/users/typos'>Опечатки</a>";
     $data['logout'] = "<a href='".$baseUrl."index.php/authorization/logout'>Выйти</a>";
     
     return $data;

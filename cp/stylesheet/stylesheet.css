@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 #content  {
     padding-top: 30px;
 }
@@ -18,12 +22,44 @@
 }
 
 #menu .items  {
-    text-align: left;
+    text-align: center;
+    font-size: 120%;
+    line-height: 150%;
+    color: #2E728A;
+}
+
+#menu .items ul {
+    padding: 0;
+}
+
+#menu .items a {
+    text-decoration: none;
+}
+
+#menu .items a:visited {
+    color: #2E728A;
+    text-decoration: none;
+}
+
+#menu .items a:hover {
+    color: #FF9C00;
 }
 
 .body  {
     margin-left: 320px;
     float: left;
+}
+
+#head {
+    padding: 8px;
+    margin-bottom: 15px;
+    background-color: #F3F3F3;
+}
+
+#head h1 {
+    vertical-align: center;
+    margin: 0;
+    color: #FF9C00;
 }
 
 #footer  {

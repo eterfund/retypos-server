@@ -1,0 +1,11 @@
+{
+  "name": "etersoft-typos-cp",
+  "description": "Control Panel for Etersoft Typos Service",
+  "repository": "git@gitlab.eterfund.ru:eterfund/typoservice.git",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^4.4.1"
+  }
+}

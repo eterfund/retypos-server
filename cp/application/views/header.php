@@ -3,12 +3,15 @@
     <head>
         <meta charset="utf-8" />
         <title>TYPOS@ETERSOFT - Сервис опечаток</title>
+
         <!--Скрипты и стили-->
-        <script src="<?=$base_url;?>javascript/jquery/jquery-1.7.2.min.js" type="text/javascript"></script>
-  
-        <script src="<?=$base_url;?>javascript/jquery_plugins/jquery-ui/1.8.23.custom/js/jquery-ui-1.8.23.custom.min.js" type="text/javascript"></script>
-        <link type="text/css" href="<?=$base_url;?>javascript/jquery_plugins/jquery-ui/1.8.23.custom/css/ui-lightness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
-  
+        <script src="<?=$base_url;?>node_modules/jquery/dist/jquery.js" type="text/javascript"></script>
+        <script src="<?=$base_url;?>node_modules/jquery-ui/build/release.js" type="text/javascript"></script>
+
+        <!-- Наши -->
+        <script src="<?=$base_url?>javascript/dist/typos-page.js"></script>
+
+        <link type="text/css" href="<?=$base_url;?>node_modules/jquery-ui/themes/base/theme.css" rel="stylesheet" />
         <link type="text/css" href="<?=$base_url;?>stylesheet/stylesheet.css" rel="stylesheet" />
         
     </head>

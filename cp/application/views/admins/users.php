@@ -1,10 +1,10 @@
 <div class="body">
 <!-- -->
-<link rel="stylesheet" type="text/css" media="screen" href="<?=$base_url?>javascript/jquery_plugins/jqGrid/4.4.0/css/ui.jqgrid.css" />
+<link rel="stylesheet" type="text/css" media="screen" href="<?=$base_url?>node_modules/free-jqgrid/dist/css/ui.jqgrid.css" />
 
-<script type="text/javascript" src="<?=$base_url?>javascript/jquery_plugins/jqGrid/4.4.0/js/i18n/grid.locale-ru.js"></script>
-<script type="text/javascript" src="<?=$base_url?>javascript/jquery_plugins/jqGrid/4.4.0/js/jquery.jqGrid.min.js"></script>
-<script type="text/javascript" src="<?=$base_url?>javascript/jquery_plugins/jqGrid/4.4.0/src/grid.subgrid.js"></script>
+<script type="text/javascript" src="<?=$base_url?>node_modules/free-jqgrid/dist/i18n/grid.locale-ru.js"></script>
+<script type="text/javascript" src="<?=$base_url?>node_modules/free-jqgrid/dist/jquery.jqgrid.min.js"></script>
+<script type="text/javascript" src="<?=$base_url?>node_modules/free-jqgrid/dist/modules/min/grid.subgrid.js"></script>
 <!-- -->
 
 <table id="table_users"></table>

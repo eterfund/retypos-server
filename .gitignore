@@ -1,4 +1,8 @@
 cp/application/config/config.php
 cp/application/config/database.php
-/nbproject
 configuration.php
+
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*

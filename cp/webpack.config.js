@@ -1,9 +1,10 @@
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
     entry: [
         // Application code
-        "./javascript/src/typos.js",
+        "./javascript/src/typos.jsx",
     ],
 
     output: {
@@ -12,21 +13,17 @@ module.exports = {
     },
 
     mode: "development",
-};
 
-module.loaders = [
-    {
-        loader: "babel-loader",
+    module: {
+        rules: [
+            {
+                loader: "babel-loader",
 
-        include: [
-            path.resolve(__dirname, "javascript/src")
-        ],
+                exclude: /node_modules/,
 
-        test: "/\.js$/",
-
-        query: {
-            presets: ['es2015']
-        }
+                test: /\.js[x]?$/,
+            }
+        ]
     }
-];
+};
 

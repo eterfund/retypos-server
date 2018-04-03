@@ -12,6 +12,10 @@ class Typo extends CI_Model {
         $limit = $data['limit'];
         $sord = $data['sord'];
         $sidx = $data['sidx'];
+
+        if ($limit == null) {
+            $limit = 10;
+        }
         
         $id_site = isset($data["id_site"]) ? $data["id_site"] : 0;
         $login_id = isset($data["login_id"]) ? $data["login_id"] : 0;
@@ -125,8 +129,11 @@ class Typo extends CI_Model {
         }
         
         $this->db->limit($limit, $start);
-        $this->db->order_by($sidx . " " . $sord);
-        
+
+        if (!empty($sidx) && !empty($sord)) {
+            $this->db->order_by($sidx . " " . $sord);
+        }
+
         $results = $this->db->get();
         
         if ( $table == 'sites') {
@@ -158,7 +165,16 @@ class Typo extends CI_Model {
     
     //Получаем список сайтов, доступных для пользователя
     function getSitesList($data) {
-        return $this->filterResults("sites", $data);
+
+        $this->db->select("sites.*");
+        $this->db->from("sites");
+        $this->db->join("responsible", "sites.id = responsible.id_site");
+        $this->db->where("responsible.id_user", $data['login_id']);
+        //$this->db->where("sites.status", 1);
+
+        return $this->db->get()->result();
+
+//        return $this->filterResults("sites", $data);
     }
 
     /* Получаем список сообщений об опечатках */

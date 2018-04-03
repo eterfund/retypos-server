@@ -17,6 +17,9 @@ class Typos extends CI_Controller {
     /* @var $typo Typo */
     public $typo;
 
+    /* @var $parser CI_Parser */
+    public $parser;
+
     /* user id */
     private $login_id;
 
@@ -30,7 +33,7 @@ class Typos extends CI_Controller {
         
         $this->load->model('typo');
         $this->load->helper('menu');
-        
+        $this->load->library('parser');
         $this->login_id = $this->session->userdata("login_id");
         
         $this->header_name = "header";
@@ -53,7 +56,7 @@ class Typos extends CI_Controller {
         
         $this->load->view($this->header_name, $data);
         $this->load->view($this->menu_name,   $data);
-        $this->load->view($this->view_name,   $data);
+        $this->parser->parse($this->view_name,   $data);
         $this->load->view($this->footer_name, $data);
         
         return true;
@@ -65,7 +68,7 @@ class Typos extends CI_Controller {
     }
 
     /*Получить список сайтов для пользователя*/
-    function get_list_sites()  {
+    function getSiteList()  {
         $data['page'] = $this->input->get('page');
         $data['limit'] = $this->input->get('rows', 1);
         $data['sord'] = $this->input->get('sord');
@@ -82,7 +85,7 @@ class Typos extends CI_Controller {
     }
     
     /*Получить список сообщений об опечатках для пользователя*/
-    function get_list_messages()  {
+    function getListTypos()  {
         log_message("debug", "get_list_messages()");
         
         $data['id_site'] = $this->input->get("id");

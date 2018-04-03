@@ -1,22 +1,48 @@
-import React, {Component} from 'react'
+import React from 'react'
+import {Nav, NavItem, NavLink, TabContent, TabPane} from "reactstrap";
 import Site from "./Site";
 
-export default class SiteList extends Component {
+export default class SiteList extends React.Component {
 
+    sites = this.props.sites;
+
+    state = {
+        activeTab: this.sites[0].id
+    };
+
+    toggle = (tab) => {
+        console.log("Toggle to ", tab);
+        if (this.state.activeTab !== tab) {
+            this.setState({
+                activeTab: tab
+            })
+        }
+    };
 
     render() {
-        const {sites} = this.props;
+        const tabItems = this.sites.map(site =>
+            <NavItem key={site.id}>
+                <NavLink className={this.state.activeTab === site.id ? "active" : ""}
+                         onClick={() => { this.toggle(site.id) }}>
+                    {site.name}
+                </NavLink>
+            </NavItem>
+        );
 
-        const siteElements = sites.map(site =>
-          <li key={site.id}><Site site={site}/></li>
+        const tabContents = this.sites.map(site =>
+            <TabPane tabId={site.id}>
+                <Site site={site} />
+            </TabPane>
         );
 
         return (
-            <div className="site-list">
-                <h1>Список сайтов, за которые вы отвечаете:</h1>
-                <ul>
-                    {siteElements}
-                </ul>
+            <div>
+                <Nav tabs>
+                    {tabItems}
+                </Nav>
+                <TabContent activeTab={this.state.activeTab}>
+                    {tabContents}
+                </TabContent>
             </div>
         )
     }

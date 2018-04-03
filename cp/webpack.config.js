@@ -12,7 +12,16 @@ module.exports = {
         path: path.resolve(__dirname, "javascript/dist")
     },
 
+    resolve: {
+        extensions: [".js", ".jsx"]
+    },
+
     mode: "development",
+
+    // Fix an error about 'fs'
+    node: {
+        fs: "empty"
+    },
 
     module: {
         rules: [

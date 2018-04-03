@@ -162,19 +162,23 @@ class Typo extends CI_Model {
         
         return $data;
     }
-    
-    //Получаем список сайтов, доступных для пользователя
-    function getSitesList($data) {
 
-        $this->db->select("sites.*");
+    /**
+     * Получает список сайтов определенного пользователя
+     *
+     * @param $userId integer Идентификатор пользователя
+     *
+     * @return array Массив сайтов пользователя
+     */
+    function getSitesList($userId) {
+
+        $this->db->select("sites.id as id, sites.site as name, sites.status as status, sites.date as date");
         $this->db->from("sites");
         $this->db->join("responsible", "sites.id = responsible.id_site");
-        $this->db->where("responsible.id_user", $data['login_id']);
+        $this->db->where("responsible.id_user", $userId);
         //$this->db->where("sites.status", 1);
 
         return $this->db->get()->result();
-
-//        return $this->filterResults("sites", $data);
     }
 
     /* Получаем список сообщений об опечатках */

@@ -23,6 +23,7 @@
   },
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
-    "webpack:w": "webpack -w webpack.config.js"
+    "webpack:vv": "webpack --display-error-details --config webpack.config.js",
+    "webpack:w": "webpack -w --config webpack.config.js"
   }
 }

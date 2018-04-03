@@ -20,6 +20,9 @@ class Typos extends CI_Controller {
     /* @var $parser CI_Parser */
     public $parser;
 
+    /* @var $output CI_Output */
+    public $output;
+
     /* user id */
     private $login_id;
 
@@ -69,19 +72,10 @@ class Typos extends CI_Controller {
 
     /*Получить список сайтов для пользователя*/
     function getSiteList()  {
-        $data['page'] = $this->input->get('page');
-        $data['limit'] = $this->input->get('rows', 1);
-        $data['sord'] = $this->input->get('sord');
-        $data['sidx'] = $this->input->get('sidx');
-        $data['search'] = $this->input->get('_search');
-        $data['searchField'] = $this->input->get('searchField');
-        $data['searchOper'] = $this->input->get('searchOper');		
-        $data['searchString'] = $this->input->get('searchString');
-        $data['login_id'] = $this->login_id;
-        
-        log_message("error", $this->login_id);
-        
-        echo json_encode($this->typo->getSitesList($data));
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($this->typo->getSitesList($this->login_id)));
     }
     
     /*Получить список сообщений об опечатках для пользователя*/

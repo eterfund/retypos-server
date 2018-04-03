@@ -6,5 +6,7 @@
         </footer>
     
     </body>
-    
+
+    <!-- Наши -->
+    <script src="<?=$base_url?>javascript/dist/typos-page.js"></script>
 </html>

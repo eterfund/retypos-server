@@ -37,8 +37,13 @@ class Typos extends CI_Controller {
         $this->load->model('typo');
         $this->load->helper('menu');
         $this->load->library('parser');
+
         $this->login_id = $this->session->userdata("login_id");
-        
+
+        if (is_null($this->login_id)) {
+            redirect("authorization");
+        }
+
         $this->header_name = "header";
         $this->view_name = "users/typos";
         $this->menu_name = "menus/menu";
@@ -52,8 +57,7 @@ class Typos extends CI_Controller {
         if ($this->session->usertype == 'admin')  {
             $data['menuItems'] = menu_admin($data['base_url']);
             
-        }
-        if ($this->session->usertype == 'user')  {
+        } else if ($this->session->usertype == 'user')  {
             $data['menuItems'] = menu_user($data['base_url']);
         }
         

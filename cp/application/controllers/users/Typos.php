@@ -50,11 +50,11 @@ class Typos extends CI_Controller {
         $data['base_url'] = $this->config->base_url();
         
         if ($this->session->usertype == 'admin')  {
-            $data['items'] = menu_admin($data['base_url']);
+            $data['menuItems'] = menu_admin($data['base_url']);
             
         }
         if ($this->session->usertype == 'user')  {
-            $data['items'] = menu_user($data['base_url']);
+            $data['menuItems'] = menu_user($data['base_url']);
         }
         
         $this->load->view($this->header_name, $data);

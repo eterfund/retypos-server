@@ -50,16 +50,8 @@ body {
     float: left;
 }
 
-#head {
-    padding: 8px;
+.header {
     margin-bottom: 15px;
-    background-color: #F3F3F3;
-}
-
-#head h1 {
-    vertical-align: center;
-    margin: 0;
-    color: #FF9C00;
 }
 
 #footer  {

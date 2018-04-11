@@ -17,8 +17,3 @@
     </head>
 
     <body>
-    
-    <!-- Шапка -->
-    <header id="head">
-        <h1> TYPOS@ETERSOFT - Сервис опечаток </h1>
-    </header>

@@ -8,25 +8,41 @@
 
 /**
  * Composes and returns a admin menu as array of items
- * @return string
+ * @return array
  */
 function menu_admin($baseUrl)  {
-    $data['sites'] = "<a href='".$baseUrl."index.php/admins/sites'>Сайты</a>";
-    $data['users'] = "<a href='".$baseUrl."index.php/admins/users'>Пользователи</a>";
-    $data['typos'] = "<a href='".$baseUrl."index.php/users/typos'>Опечатки</a>";
-    $data['logout'] = "<a href='".$baseUrl."index.php/authorization/logout'>Выйти</a>";
+    $data = [];
+
+    $data[] = [
+        "href" => "${baseUrl}index.php/admins/sites",
+        "name" => "Сайты"
+    ];
+
+    $data[] = [
+        "href" => "${baseUrl}index.php/admins/users",
+        "name" => "Пользователи"
+    ];
+
+    $data[] = [
+        "href" => "${baseUrl}index.php/users/typos",
+        "name" => "Опечатки"
+    ];
 
     return $data;
 }   
 
 /**
  * Composes and returns a user menu as array of items
- * @return string
+ * @return array
  */
 function menu_user($baseUrl)  {
-    //$data['typos'] = "<a href='".$baseUrl."index.php/users/typos'>Опечатки</a>";
-    $data['logout'] = "<a href='".$baseUrl."index.php/authorization/logout'>Выйти</a>";
-    
+    $data = [];
+
+    $data[] = [
+        "href" => "${baseUrl}index.php/users/typos",
+        "name" => "Опечатки"
+    ];
+
     return $data;
 }
 

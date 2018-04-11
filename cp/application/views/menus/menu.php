@@ -12,7 +12,6 @@
 
     <div class="collapse navbar-collapse " id="navbarNav">
         <ul class="navbar-nav mr-auto">
-
             <?foreach ($menuItems as $index => $item): ?>
                 <?if ($index === 0): ?>
                     <li class="nav-item active">

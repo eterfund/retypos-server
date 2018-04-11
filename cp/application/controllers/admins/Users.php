@@ -27,7 +27,7 @@ class Users extends CI_Controller {
     
     /*Создаем шаблон*/
     function index()  {
-        $data['items'] = menu_admin($this->config->base_url());
+        $data['menuItems'] = menu_admin($this->config->base_url());
         $data['base_url'] = $this->config->base_url();
         
         $this->load->view($this->header_name, $data);

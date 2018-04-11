@@ -1,43 +1,93 @@
 import React from 'react'
-import {Nav, NavItem, NavLink, TabContent, TabPane} from "reactstrap";
-import Site from "./Site";
+import {Nav, NavItem, NavLink, TabContent, TabPane, Alert} from "reactstrap";
+import TypoList from "./TypoList";
 
 export default class SiteList extends React.Component {
 
-    sites = this.props.sites;
+    constructor(props) {
+        super(props);
 
-    state = {
-        activeTab: this.sites[0].id
-    };
+        this.sites = this.props.sites;
+
+        this.state = {
+            activeTab: 0,
+            error: false,
+        };
+
+        this.typos = [];
+
+        this.loadSiteTypos(this.state.activeTab, () =>
+            this.forceUpdate()
+        );
+    }
 
     toggle = (tab) => {
-        console.log("Toggle to ", tab);
         if (this.state.activeTab !== tab) {
-            this.setState({
-                activeTab: tab
+            /* Обновляем стейт только после загрузки опечаток */
+            this.loadSiteTypos(tab, () => {
+                this.state.activeTab = tab;
+                this.forceUpdate();
             })
         }
     };
 
+    loadSiteTypos(siteId, done) {
+        $.ajax({
+            url: window.baseUrl + "/users/typos/getSiteTypos?siteId=" + this.sites[siteId],
+        }).done((typos) => {
+            this.typos = typos;
+
+            if (done) {
+                done();
+            }
+        }).fail((error) => {
+            console.log(error);
+            this.state.error = true;
+
+            if (done) {
+                done();
+            }
+        });
+    }
+
     render() {
-        const tabItems = this.sites.map(site =>
-            <NavItem key={site.id}>
-                <NavLink className={this.state.activeTab === site.id ? "active" : ""}
-                         onClick={() => { this.toggle(site.id) }}>
+        const tabItems = this.sites.map((site, index) =>
+            <NavItem key={index}>
+                <NavLink className={this.state.activeTab === index ? "active" : ""}
+                         onClick={() => { this.toggle(index) }}>
                     {site.name}
                 </NavLink>
             </NavItem>
         );
 
-        const tabContents = this.sites.map(site =>
-            <TabPane tabId={site.id}>
-                <Site site={site} />
-            </TabPane>
-        );
+        const tabContents = this.sites.map((site, index) => {
+            // Если была ошибка загрузки, то error = true,
+            // тогда вместо контента покажем ошибку загрузки
+            if (index === this.state.activeTab && this.state.error) {
+                return (
+                    <Alert key={index} color="danger">
+                        <h4 className="alert-heading">
+                            Произошла ошибка загрузки, попробуйте позже
+                        </h4>
+                        <p>
+                            При загрузке опечаток для сайта <strong>{site.name}</strong> произошла
+                            ошибка. Попробуйте позже или напишите в службу поддержки
+                            support@etersoft.ru.
+                        </p>
+                    </Alert>
+                );
+            }
+
+            return(
+                <TabPane key={index} tabId={index}>
+                    <TypoList typos={this.typos}/>
+                </TabPane>
+            );
+        });
 
         return (
             <div>
-                <Nav tabs>
+                <Nav pills fill>
                     {tabItems}
                 </Nav>
                 <TabContent activeTab={this.state.activeTab}>

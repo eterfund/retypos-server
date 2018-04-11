@@ -1,3 +1,3 @@
-<div id="root" class="body">
+<div id="root" class="body border border-light">
 
 </div>

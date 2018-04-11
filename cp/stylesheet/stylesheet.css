@@ -12,43 +12,11 @@ body {
     position: absolute;
 }
 
-#menu  {
-    border-radius: 0.5em;
-    background-color:  #F3F3F3;
-    width: 300px;
-    text-align: center;
-    border: 1px solid #D0D0D0;
-    box-shadow: 4px 4px 3px #888888;
+.body {
+    width: 80%;
+    margin: 0 auto;
 }
 
-#menu .items  {
-    text-align: center;
-    font-size: 120%;
-    line-height: 150%;
-    color: #2E728A;
-}
-
-#menu .items ul {
-    padding: 0;
-}
-
-#menu .items a {
-    text-decoration: none;
-}
-
-#menu .items a:visited {
-    color: #2E728A;
-    text-decoration: none;
-}
-
-#menu .items a:hover {
-    color: #FF9C00;
-}
-
-.body  {
-    margin-left: 320px;
-    float: left;
-}
 
 .header {
     margin-bottom: 15px;
@@ -62,4 +30,8 @@ body {
 
 .typo {
     background-color: rgba(200, 200, 10, 0.2);
+}
+
+.tab-content {
+    margin-top: 10px;
 }

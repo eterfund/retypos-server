@@ -33,7 +33,7 @@ export default class SiteList extends React.Component {
 
     loadSiteTypos(siteId, done) {
         $.ajax({
-            url: window.baseUrl + "/users/typos/getSiteTypos?siteId=" + this.sites[siteId],
+            url: `${window.baseUrl}/users/typos/getSiteTypos/${this.sites[siteId].id}`,
         }).done((typos) => {
             this.typos = typos;
 

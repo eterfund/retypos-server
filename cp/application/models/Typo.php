@@ -181,6 +181,20 @@ class Typo extends CI_Model {
         return $this->db->get()->result();
     }
 
+    /**
+     * Получает список опечаток текущего пользователя для данного
+     * сайта. Возвращает список.
+     *
+     * @param $siteId
+     */
+    function getSiteTypos($siteId) {
+        $this->db->select("id, text as originalText, context, comment as correctedText, date, status as isCorrected");
+        $this->db->from("messages");
+        $this->db->where("site_id", $siteId);
+
+        return $this->db->get()->result();
+    }
+
     /* Получаем список сообщений об опечатках */
 
     function getMessagesList($data) {

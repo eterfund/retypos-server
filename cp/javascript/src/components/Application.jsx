@@ -1,5 +1,5 @@
 import React from 'react';
-import Typo from './Typo'
+import Typo from './Typo/index'
 
 export default class Application extends Component {
     render() {

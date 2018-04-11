@@ -100,6 +100,17 @@ class Typos extends CI_Controller {
         echo json_encode($this->typo->getMessagesList($data));
     }
 
+    function getSiteTypos($siteId = null) {
+        if (is_null($siteId)) {
+            return $this->output->set_status_header(400)
+                ->set_output("Missing siteId parameter!");
+        }
+
+        return $this->output->set_content_type("application/json")
+            ->set_status_header(200)
+            ->set_output(json_encode($this->typo->getSiteTypos($siteId)));
+    }
+
     /*Управление сайтами*/
     function panel_sites()  {
         $id_site = $this->input->get("id");

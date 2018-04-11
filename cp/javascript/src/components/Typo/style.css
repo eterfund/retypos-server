@@ -1,0 +1,20 @@
+.TypoCard {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.TypoCard .card-body {
+    position: relative;
+    min-height: 250px;
+}
+
+.TypoCard .accept-button {
+    margin-right: 15px;
+}
+
+.TypoCard .card-buttons {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 20px;
+}

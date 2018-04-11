@@ -22,10 +22,15 @@ body {
     margin-bottom: 15px;
 }
 
-#footer  {
-    padding-top: 50px;
-    clear: both;
+.footer  {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     text-align: center;
+}
+
+.footer .copyright {
+    font-size: 80%;
 }
 
 .typo {

@@ -1,10 +1,9 @@
             </div>
         </div>
-        
-        <footer id="footer">
-            <p>Copyright (c) etersoft 2017</p>
-        </footer>
-    
+
+        <div class="footer bg-primary">
+            <span class="text-white copyright">Копирайт (С) 2018 "Этерсофт"</span>
+        </div>
     </body>
 
     <!-- Наши -->

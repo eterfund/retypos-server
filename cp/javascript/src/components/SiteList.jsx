@@ -1,5 +1,5 @@
 import React from 'react'
-import {Nav, NavItem, NavLink, TabContent, TabPane, Alert} from "reactstrap";
+import {Nav, NavItem, NavLink, TabContent, TabPane, Alert, Badge} from "reactstrap";
 import TypoList from "./TypoList/";
 
 export default class SiteList extends React.Component {
@@ -56,6 +56,11 @@ export default class SiteList extends React.Component {
                 <NavLink className={this.state.activeTab === index ? "active" : ""}
                          onClick={() => { this.toggle(index) }}>
                     {site.name}
+
+                    <Badge id={site.id + "-typos-count"} className={"typos-count"}
+                           hidden={this.state.activeTab !== index}>
+                        {this.typos.length}
+                    </Badge>
                 </NavLink>
             </NavItem>
         );

@@ -24,6 +24,7 @@ export default class TypoList extends Component {
             alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
                 <p>Исправления применены к тексту, содержащему опечатку.</p>`);
             this.state.currentTypo++;
+            this._decrementSiteTyposCount();
             this.forceUpdate();
         });
     }
@@ -38,6 +39,7 @@ export default class TypoList extends Component {
         this._setTypoStatus(0, typoId, this.state.siteId, () => {
             alertify.success(`Опечатка ${typoId} была отклонена`);
             this.state.currentTypo++;
+            this._decrementSiteTyposCount();
             this.forceUpdate();
         });
     }
@@ -107,5 +109,14 @@ export default class TypoList extends Component {
                 {typoCards}
             </div>
         )
+    }
+
+    /**
+     * Уменьшает счетчик опечаток сайта
+     * @private
+     */
+    _decrementSiteTyposCount() {
+        const value = parseInt($(`#${this.state.siteId}-typos-count`).text());
+        $(`#${this.state.siteId}-typos-count`).text(value-1);
     }
 }

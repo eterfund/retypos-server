@@ -13,8 +13,6 @@
 }
 
 .TypoCard .card-buttons {
-    position: absolute;
-    bottom: 0;
     width: 100%;
     margin-bottom: 20px;
 }

@@ -10,7 +10,7 @@ export default class Typo extends Component {
     };
 
     render() {
-        const {typo} = this.props;
+        const {typo, acceptCallback, declineCallback} = this.props;
 
         const display = this.state.show ? "d-block" : "d-none";
         const textColor = "text-white";
@@ -22,6 +22,9 @@ export default class Typo extends Component {
             <Card className={className}>
                 <CardHeader>
                     Опечатка #{typo.id}
+                    <span id="typo-id">
+                        <a href={typo.link} target="_blank">Ссылка на текст</a>
+                    </span>
                 </CardHeader>
 
                 <CardBody>
@@ -30,8 +33,8 @@ export default class Typo extends Component {
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">
-                            <button className="accept-button btn btn-warning">Исправить</button>
-                            <button className="decline-button btn btn-danger">Отклонить</button>
+                            <button className="accept-button btn btn-warning" onClick={acceptCallback}>Исправить</button>
+                            <button className="decline-button btn btn-danger" onClick={declineCallback}>Отклонить</button>
                         </div>
                     </div>
                 </CardBody>

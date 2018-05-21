@@ -49,6 +49,10 @@ body {
     margin-bottom: 5px !important;
 }
 
+.header .nav-item {
+    border-bottom: none !important;
+}
+
 li.nav-item {
     cursor: pointer;
     border-bottom: 1px solid transparent;

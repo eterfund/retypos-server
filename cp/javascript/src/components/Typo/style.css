@@ -18,3 +18,13 @@
     width: 100%;
     margin-bottom: 20px;
 }
+
+.TypoCard a {
+    color: white;
+}
+
+.TypoCard #typo-id {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+}

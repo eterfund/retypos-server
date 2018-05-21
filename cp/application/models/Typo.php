@@ -186,12 +186,13 @@ class Typo extends CI_Model {
      * сайта. Возвращает список.
      *
      * @param $siteId
+     * @return array Список опечаток
      */
     function getSiteTypos($siteId) {
-        $this->db->select("id, text as originalText, context, comment as correctedText, date, status as isCorrected");
+        $this->db->select("id, link, text as originalText, context, comment as correctedText, date, status as isCorrected");
         $this->db->from("messages");
         $this->db->where("site_id", $siteId);
-
+        $this->db->where("status", 0);
         return $this->db->get()->result();
     }
 
@@ -352,6 +353,16 @@ class Typo extends CI_Model {
         log_message("debug", "Response from $url: $res");
         
         curl_close($curl);
+    }
+
+    /**
+     * Устанавливает статус опечатки как исправлено,
+     * но при этом не вносит изменений в текст статьи.
+     *
+     * @param $typoId Идентификатор опечатки
+     */
+    function declineTypo($typoId) {
+
     }
 }
 

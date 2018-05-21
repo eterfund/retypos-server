@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
-import Typo from "./Typo/index";
+import {Card, CardHeader, CardBody, CardText} from 'reactstrap'
+
+import Typo from "../Typo/";
+
+import './style.css'
 
 const alertify = require("alertify.js");
 
@@ -60,6 +64,23 @@ export default class TypoList extends Component {
         });
     }
 
+    static _displayEmptyMessage() {
+        return (
+            <Card className="text-center" inverse color="danger">
+                <CardHeader>
+                    Список опечаток для сайта пуст
+                </CardHeader>
+                <CardBody>
+                    <CardText>
+                        В данный момент нет неисправленых опечаток.<br />
+                        Когда новые опечатки будут отправлены, вы получите
+                        уведомление на почту.
+                    </CardText>
+                </CardBody>
+            </Card>
+        )
+    }
+
     render() {
 
         const {typos} = this.props;
@@ -67,6 +88,10 @@ export default class TypoList extends Component {
         this.state.siteId = this.props.siteId;
 
         console.log("Render typolist for site " + this.state.siteId);
+
+        if (typos.length === 0) {
+            return TypoList._displayEmptyMessage();
+        }
 
         const typoCards = typos.map((typo, index) =>
             <Typo key={typo.id} typo={typo}

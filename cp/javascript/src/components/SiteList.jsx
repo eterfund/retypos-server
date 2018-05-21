@@ -1,6 +1,6 @@
 import React from 'react'
 import {Nav, NavItem, NavLink, TabContent, TabPane, Alert} from "reactstrap";
-import TypoList from "./TypoList";
+import TypoList from "./TypoList/";
 
 export default class SiteList extends React.Component {
 

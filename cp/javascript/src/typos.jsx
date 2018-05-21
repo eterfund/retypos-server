@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom';
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Общие стили
+import './style.css'
+
 import SiteList from "./components/SiteList";
 
 // Get json array of typos and render component application

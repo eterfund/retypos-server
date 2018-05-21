@@ -30,7 +30,7 @@ export default class Typo extends Component {
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">
-                            <button className="accept-button btn btn-success">Исправить</button>
+                            <button className="accept-button btn btn-warning">Исправить</button>
                             <button className="decline-button btn btn-danger">Отклонить</button>
                         </div>
                     </div>

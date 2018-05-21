@@ -20,6 +20,9 @@ body {
 
 .header {
     margin-bottom: 15px;
+    border-bottom: 1px solid #bbb;
+    padding: 0 !important;
+    padding-right: 10px !important;
 }
 
 .footer  {
@@ -39,4 +42,37 @@ body {
 
 .tab-content {
     margin-top: 10px;
+}
+
+/* Bootstrap customizations */
+.nav-pills {
+    margin-bottom: 5px !important;
+}
+
+li.nav-item {
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    border-radius: 0 !important;
+}
+
+li.nav-item:hover {
+    border-bottom: 1px solid #007bff;
+    border-radius: 0 !important;
+}
+
+li.nav-item > a.nav-link.active:hover {
+    color: #ffc107;
+}
+
+.navbar-nav .nav-item.active {
+    background-color: #ffc107;
+}
+
+.navbar-brand {
+    font-size: 110% !important;
+    padding: 5px;
+}
+
+.nav-pills .nav-item {
+    margin-right: 5px;
 }

@@ -1,7 +1,7 @@
 <!-- Шапка-меню -->
 <nav class="header navbar navbar-expand-md navbar-light bg-light">
     <a href="#" class="navbar-brand">
-        <img src="//time.office.etersoft.ru/images/logo.png" width="30" height="30" alt="Etersoft Logo">
+<!--        <img src="//time.office.etersoft.ru/images/logo.png" width="30" height="30" alt="Etersoft Logo">-->
         TYPOS@ETERSOFT - Сервис опечаток
     </a>
 

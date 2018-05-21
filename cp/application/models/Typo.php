@@ -246,11 +246,18 @@ class Typo extends CI_Model {
         }
     }
 
-    /* Обновляем статус сообщения */
-
+    /**
+     *
+     * @param $data
+     */
     function editMessage($data) {
         if ($this->getMessageRights($data)) {
-            if ( $data['status'] ) {
+            // По умолчанию ошибки исправляются
+            if (!isset($data["autoCorrection"])) {
+                $data["autoCorrection"] = true;
+            }
+
+            if ( $data['status'] && $data["autoCorrection"] ) {
                 $this->correctTypo($data["id_message"]);
             }
             
@@ -353,16 +360,6 @@ class Typo extends CI_Model {
         log_message("debug", "Response from $url: $res");
         
         curl_close($curl);
-    }
-
-    /**
-     * Устанавливает статус опечатки как исправлено,
-     * но при этом не вносит изменений в текст статьи.
-     *
-     * @param $typoId Идентификатор опечатки
-     */
-    function declineTypo($typoId) {
-
     }
 }
 

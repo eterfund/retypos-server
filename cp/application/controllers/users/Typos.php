@@ -74,15 +74,78 @@ class Typos extends CI_Controller {
         return;
     }
 
-    /*Получить список сайтов для пользователя*/
+    function setTypoStatus($typoId = null, $siteId = null, $status = 0) {
+        $response = [
+            "error" => false,
+            "message" => "Success"
+        ];
+
+        if (!$typoId || !$siteId) {
+            $response["error"] = true;
+            $response["message"] = "Invalid parameters passed";
+
+            return $this->output
+                ->set_content_type('application/json')
+                ->set_status_header(400)
+                ->set_output(json_encode($response));
+        }
+
+        $data = [
+            "autoCorrection" => true,
+            "status" => $status,
+            "id_message" => $typoId,
+            "id_site" => $siteId,
+            "login_id" => $this->login_id
+        ];
+
+        // Нужно в любом случае выставить статус 1
+        // Но если $status == 0, то необходимо выключить
+        // автоисправление текста статьи.
+        if ($status == 0) {
+            $data["autoCorrection"] = false;
+            $data["status"] = true;
+        }
+
+        $this->typo->editMessage($data);
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode($response));
+    }
+
+    /**
+     * Получить список сайтов для пользователя
+     */
     function getSiteList()  {
         return $this->output
             ->set_content_type('application/json')
             ->set_status_header(200)
             ->set_output(json_encode($this->typo->getSitesList($this->login_id)));
     }
-    
-    /*Получить список сообщений об опечатках для пользователя*/
+
+    /**
+     * Возвращает список опечаток для данного сайта в
+     * формате json.
+     *
+     * @param integer $siteId Идентификатор сайта
+     * @return CI_Output Json результат
+     */
+    function getSiteTypos($siteId = null) {
+        if (is_null($siteId)) {
+            return $this->output->set_status_header(400)
+                ->set_output("Missing siteId parameter!");
+        }
+
+        return $this->output->set_content_type("application/json")
+            ->set_status_header(200)
+            ->set_output(json_encode($this->typo->getSiteTypos($siteId)));
+    }
+
+    /**
+     * Получить список сообщений об опечатках для пользователя
+     * OLD
+     */
     function getListTypos()  {
         log_message("debug", "get_list_messages()");
         
@@ -100,18 +163,10 @@ class Typos extends CI_Controller {
         echo json_encode($this->typo->getMessagesList($data));
     }
 
-    function getSiteTypos($siteId = null) {
-        if (is_null($siteId)) {
-            return $this->output->set_status_header(400)
-                ->set_output("Missing siteId parameter!");
-        }
-
-        return $this->output->set_content_type("application/json")
-            ->set_status_header(200)
-            ->set_output(json_encode($this->typo->getSiteTypos($siteId)));
-    }
-
-    /*Управление сайтами*/
+    /**
+     * Управление сайтами
+     * OLD
+     */
     function panel_sites()  {
         $id_site = $this->input->get("id");
         $oper = $this->input->get("oper");
@@ -131,7 +186,9 @@ class Typos extends CI_Controller {
         
     }
 
-    /*Управление сообщениями*/
+    /**
+     * OLD
+     */
     function panel_messages()  {
         
         $oper = $this->input->post('oper');

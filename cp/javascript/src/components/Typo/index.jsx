@@ -10,13 +10,19 @@ export default class Typo extends Component {
     };
 
     render() {
-        const {typo, acceptCallback, declineCallback} = this.props;
+        const {typo, acceptCallback, declineCallback, show} = this.props;
 
-        const display = this.state.show ? "d-block" : "d-none";
+        const display = show ? "d-block" : "d-none";
         const textColor = "text-white";
         const backgroundColor = "bg-primary";
 
         const className = `TypoCard text-center ${display} ${backgroundColor} ${textColor}`;
+
+        if (show) {
+            console.log("Render typo #" + typo.id);
+        } else {
+            console.log("Render hidden typo #" + typo.id);
+        }
 
         return (
             <Card className={className}>

@@ -78,11 +78,18 @@ export default class SiteList extends React.Component {
                 );
             }
 
-            return(
-                <TabPane key={index} tabId={index}>
-                    <TypoList typos={this.typos}/>
-                </TabPane>
-            );
+            if (this.state.activeTab === index) {
+                return (
+                    <TabPane key={index} tabId={index}>
+                        <TypoList siteId={site.id} typos={this.typos}/>
+                    </TabPane>
+                );
+            } else { // Если не активная вкладка - то не рендерим содержимое
+                return (
+                    <TabPane key={index} tabId={index}>
+                    </TabPane>
+                );
+            }
         });
 
         return (

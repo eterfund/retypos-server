@@ -35,7 +35,7 @@ export default class Typo extends Component {
 
                 <CardBody>
                     <CardTitle><del>{typo.originalText}</del> -> {typo.correctedText}</CardTitle>
-                    <CardText><div>{typo.context}</div></CardText>
+                    <CardText>{typo.context}</CardText>
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Typo from "./Typo/index";
 
+const alertify = require("alertify.js");
+
 export default class TypoList extends Component {
     state = {
         currentTypo: 0,
@@ -15,6 +17,8 @@ export default class TypoList extends Component {
      */
     acceptCorrection(typoId) {
         this._setTypoStatus(1, typoId, this.state.siteId, () => {
+            alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
+                <p>Исправления применены к тексту, содержащему опечатку.</p>`);
             this.state.currentTypo++;
             this.forceUpdate();
         });
@@ -28,6 +32,7 @@ export default class TypoList extends Component {
      */
     declineCorrection(typoId) {
         this._setTypoStatus(0, typoId, this.state.siteId, () => {
+            alertify.success(`Опечатка ${typoId} была отклонена`);
             this.state.currentTypo++;
             this.forceUpdate();
         });
@@ -48,10 +53,9 @@ export default class TypoList extends Component {
         $.ajax({
             url: `${window.baseUrl}users/typos/setTypoStatus/${typoId}/${siteId}/${status}`,
         }).done(() => {
-            alert("Status changed");
             then();
         }).fail((error) => {
-            alert("Status change error");
+            alertify.fail("Ошибка исправления опечатки, попробуйте позже");
             console.error(error.message);
         });
     }

@@ -5,6 +5,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "alertify.js": "^1.0.12",
     "bootstrap": "^4.0.0",
     "free-jqgrid": "^4.15.3",
     "jquery": "^3.3.1",

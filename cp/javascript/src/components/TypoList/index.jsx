@@ -89,7 +89,7 @@ export default class TypoList extends Component {
 
         console.log("Render typolist for site " + this.state.siteId);
 
-        if (typos.length === 0) {
+        if (typos.length === 0 || this.state.currentTypo >= typos.length) {
             return TypoList._displayEmptyMessage();
         }
 

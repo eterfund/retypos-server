@@ -64,6 +64,11 @@ li.nav-item:hover {
     border-radius: 0 !important;
 }
 
+a.nav-link.active {
+    color: black !important;
+    background-color: #ffc107 !important;
+}
+
 li.nav-item > a.nav-link.active:hover {
     color: #ffc107;
 }

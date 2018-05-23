@@ -1,0 +1,23 @@
+
+.text-editable {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: inherit;
+}
+
+.text-editable-wrapper {
+    display: inline-block;
+}
+
+.text-editable-button {
+    cursor: pointer;
+}
+
+.text-editable-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.text-editable-wrapper .button-wrapper {
+    display: inline-block;
+    margin-left: 5px;
+}

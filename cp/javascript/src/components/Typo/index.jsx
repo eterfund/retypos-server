@@ -11,9 +11,12 @@ export default class Typo extends Component {
         this.toggleDeclineTooltip = this.toggleDeclineTooltip.bind(this);
         this.toggleAcceptTooltip = this.toggleAcceptTooltip.bind(this);
 
+        this.typo = props.typo;
+
         this.state = {
             acceptTooltipOpen: false,
-            declineTooltipOpen: false
+            declineTooltipOpen: false,
+            textHighlighted: false,
         };
     }
 
@@ -39,8 +42,41 @@ export default class Typo extends Component {
         })
     }
 
+    _escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    /**
+     * Выделяет опечатку в контексте
+     */
+    _highlightTypoInContext() {
+        const original = this._escapeHtml(this.typo.originalText);
+        const corrected = this._escapeHtml(this.typo.correctedText);
+        const context = this._escapeHtml(this.typo.context);
+
+        // Экранируем символы, которые мешают использовать регулярные выражения
+        const escapedTypoString = original.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        let regex = new RegExp(escapedTypoString, "g");
+
+        this.typo.context = context.replace(regex,
+            `<span class="typo-correction">
+                <del>${original}</del> -> 
+                <span class="text-danger">${corrected}</span>
+             </span>`);
+    }
+
     render() {
-        const {typo, acceptCallback, declineCallback, show} = this.props;
+        const typo = this.typo;
+        const {acceptCallback, declineCallback, show} = this.props;
 
         const display = show ? "d-block" : "d-none";
         const textColor = "text-white";
@@ -54,6 +90,11 @@ export default class Typo extends Component {
             console.log("Render hidden typo #" + typo.id);
         }
 
+        if (!this.state.textHighlighted) {
+            this._highlightTypoInContext();
+            this.state.textHighlighted = true;
+        }
+
         return (
             <Card className={className}>
                 <CardHeader>
@@ -65,7 +106,8 @@ export default class Typo extends Component {
 
                 <CardBody>
                     <CardTitle><del>{typo.originalText}</del> -> {typo.correctedText}</CardTitle>
-                    <CardText>{typo.context}</CardText>
+
+                    <CardText dangerouslySetInnerHTML={{__html: this.typo.context}} />
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">

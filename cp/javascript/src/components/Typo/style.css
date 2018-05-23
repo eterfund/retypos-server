@@ -30,3 +30,8 @@
 .TypoCard .card-text {
     min-height: 100px;
 }
+
+.typo-correction {
+    cursor: pointer;
+    text-decoration: underline;
+}

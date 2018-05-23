@@ -1,13 +1,43 @@
 import React, {Component} from 'react';
-import {Card, CardHeader, CardTitle, CardFooter, CardBody, CardText} from 'reactstrap'
+import {Card, CardHeader, CardTitle, CardFooter, CardBody, CardText, Tooltip} from 'reactstrap'
 
 import './style.css'
 
 export default class Typo extends Component {
 
-    state = {
-      show: this.props.show
-    };
+    constructor(props) {
+        super(props);
+
+        this.toggleDeclineTooltip = this.toggleDeclineTooltip.bind(this);
+        this.toggleAcceptTooltip = this.toggleAcceptTooltip.bind(this);
+
+        this.state = {
+            acceptTooltipOpen: false,
+            declineTooltipOpen: false
+        };
+    }
+
+    /**
+     * Управляет отображением всплывающей подсказки для
+     * кнопки принятия исправления.
+     */
+    toggleAcceptTooltip() {
+        this.setState({
+            acceptTooltipOpen: !this.state.acceptTooltipOpen,
+            declineTooltipOpen: false
+        })
+    }
+
+    /**
+     * Управляет отображением всплывающей подсказки для
+     * кнопки отклонения исправления.
+     */
+    toggleDeclineTooltip() {
+        this.setState({
+            acceptTooltipOpen: false,
+            declineTooltipOpen: !this.state.declineTooltipOpen
+        })
+    }
 
     render() {
         const {typo, acceptCallback, declineCallback, show} = this.props;
@@ -39,8 +69,16 @@ export default class Typo extends Component {
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">
-                            <button className="accept-button btn btn-warning" onClick={acceptCallback}>Исправить</button>
-                            <button className="decline-button btn btn-danger" onClick={declineCallback}>Отклонить</button>
+                            <button id="acceptTypo" className="accept-button btn btn-warning" onClick={acceptCallback}>Исправить</button>
+                            <Tooltip placement="left" isOpen={this.state.acceptTooltipOpen}
+                                     target="acceptTypo" toggle={this.toggleAcceptTooltip}>
+                                Опечатка будет автоматически исправлена
+                            </Tooltip>
+                            <button id="declineTypo" className="decline-button btn btn-danger" onClick={declineCallback}>Отклонить</button>
+                            <Tooltip placement="right" isOpen={this.state.declineTooltipOpen}
+                                     target="declineTypo" toggle={this.toggleDeclineTooltip}>
+                                Опечатка не будет исправлена автоматически
+                            </Tooltip>
                         </div>
                     </div>
                 </CardBody>

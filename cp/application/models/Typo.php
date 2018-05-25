@@ -249,6 +249,7 @@ class Typo extends CI_Model {
     /**
      *
      * @param $data
+     * @throws Exception Если не удалось изменить статус сообщения
      */
     function editMessage($data) {
         if (!$this->getMessageRights($data)) {
@@ -311,9 +312,9 @@ class Typo extends CI_Model {
      * Отправляет запрос на исправление ошибки на сервер
      *
      * @param $data array Информация об опечатке
+     * @throws Exception Если произошла ошибка
      */
     function correctTypo($data) {
-        /* TODO: брать из конфига */
         $correctPath = $this->config->item("correction_path");
         $authToken = $this->config->item("typos_password");
         $username = $this->config->item("typos_user");
@@ -352,15 +353,36 @@ class Typo extends CI_Model {
         log_message("debug", "corrected = {$data["corrected"]}");
 
         if ( !($res = curl_exec($curl)) && curl_errno($curl) != 0 ) {
-            log_message("debug", "CorrectTypo errorCode: " . curl_errno($curl));
-            log_message("debug", "CorrectTypo errorText: " . curl_error($curl));
-            return;
+            $errorCode = curl_errno($curl);
+            $errorText = curl_error($curl);
+
+            log_message("debug", "CorrectTypo errorCode: " . $errorCode);
+            log_message("debug", "CorrectTypo errorText: " . $errorText);
+
+            throw $this->getExceptionForCurlError($errorCode, $url);
         }
         
         log_message("debug", "response taken");
         log_message("debug", "Response from $url: $res");
         
         curl_close($curl);
+    }
+
+    /**
+     * Создает исключение, которое описывает ошибку запроса curl
+     *
+     * @param $errorCode  integer   Код ошибки curl
+     * @param $url        string    URL сервера
+     *
+     * @return Exception исключение
+     */
+    private function getExceptionForCurlError($errorCode, $url)
+    {
+        if ($errorCode == CURLE_COULDNT_RESOLVE_HOST) {
+            return new Exception("\"$url\" не отвечает, попробуйте позже", 503);
+        } else {
+            return new Exception("Произошла ошибка при попытке исправить опечатку, попробуйте позже", 500);
+        }
     }
 }
 

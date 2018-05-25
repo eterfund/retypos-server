@@ -26,12 +26,18 @@ export default class TypoList extends Component {
      */
     acceptCorrection(typoId, corrected) {
         this._setTypoStatus(1, typoId, this.state.siteId, corrected)
-            .done(() => {
-                alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
-                <p>Исправления применены к тексту, содержащему опечатку.</p>`);
-                this.state.currentTypo++;
-                this._decrementSiteTyposCount();
-                this.forceUpdate();
+            .done((response) => {
+                if (response.error === false) {
+                    alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
+                        <p>Исправления применены к тексту, содержащему опечатку.</p>`);
+
+                    this.state.currentTypo++;
+                    this._decrementSiteTyposCount();
+                    this.forceUpdate();
+                    return;
+                }
+
+                alertify.error(response.message);
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");

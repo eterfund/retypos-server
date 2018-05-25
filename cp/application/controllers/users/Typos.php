@@ -124,7 +124,12 @@ class Typos extends CI_Controller {
             $data["status"] = true;
         }
 
-        $this->typo->editMessage($data);
+        try {
+            $this->typo->editMessage($data);
+        } catch (Exception $e) {
+            $response["error"] = true;
+            $response["message"] = $e->getMessage();
+        }
 
         return $this->output
             ->set_content_type('application/json')

@@ -5,6 +5,10 @@ import Typo from "../Typo/";
 
 import './style.css'
 
+/**
+ * Alertify object
+ * @type {Alertify}
+ */
 const alertify = require("alertify.js");
 
 export default class TypoList extends Component {
@@ -14,19 +18,24 @@ export default class TypoList extends Component {
     };
 
     /**
-     * Одобряет предложеное исправление опечатки
+     * Одобряет исправление опечатки
      * и вносит соответствующее исправление в текст.
      *
      * @param typoId Идентификатор опечатки
+     * @param corrected Финальный вариант исправления
      */
-    acceptCorrection(typoId) {
-        this._setTypoStatus(1, typoId, this.state.siteId, () => {
-            alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
+    acceptCorrection(typoId, corrected) {
+        this._setTypoStatus(1, typoId, this.state.siteId, corrected)
+            .done(() => {
+                alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
                 <p>Исправления применены к тексту, содержащему опечатку.</p>`);
-            this.state.currentTypo++;
-            this._decrementSiteTyposCount();
-            this.forceUpdate();
-        });
+                this.state.currentTypo++;
+                this._decrementSiteTyposCount();
+                this.forceUpdate();
+            })
+            .fail(() => {
+                alertify.error("Ошибка исправления опечатки, попробуйте позже");
+            })
     }
 
     /**
@@ -36,12 +45,16 @@ export default class TypoList extends Component {
      * @param typoId Идентификатор опечатки.
      */
     declineCorrection(typoId) {
-        this._setTypoStatus(0, typoId, this.state.siteId, () => {
-            alertify.success(`Опечатка ${typoId} была отклонена`);
-            this.state.currentTypo++;
-            this._decrementSiteTyposCount();
-            this.forceUpdate();
-        });
+        this._setTypoStatus(0, typoId, this.state.siteId)
+            .done(() => {
+                alertify.success(`Опечатка ${typoId} была отклонена`);
+                this.state.currentTypo++;
+                this._decrementSiteTyposCount();
+                this.forceUpdate();
+            })
+            .fail(() => {
+                alertify.error("Ошибка исправления опечатки, попробуйте позже");
+            });
     }
 
     /**
@@ -53,16 +66,18 @@ export default class TypoList extends Component {
      * @param status    Новый статус опечатки
      * @param typoId    Идентификатор опечатки
      * @param siteId    Идентификатор сайта, на котором найдена опечатка
-     * @param then      Колбэк функция
+     * @param corrected Исправленный вариант
      */
-    _setTypoStatus(status, typoId, siteId, then) {
-        $.ajax({
-            url: `${window.baseUrl}users/typos/setTypoStatus/${typoId}/${siteId}/${status}`,
-        }).done(() => {
-            then();
-        }).fail((error) => {
-            alertify.fail("Ошибка исправления опечатки, попробуйте позже");
-            console.error(error.message);
+    _setTypoStatus(status, typoId, siteId, corrected) {
+        return $.ajax({
+            method: "POST",
+            url: `${window.baseUrl}users/typos/setTypoStatus`,
+            data: {
+                accepted: status,
+                typoId: typoId,
+                siteId: siteId,
+                corrected: corrected,
+            }
         });
     }
 

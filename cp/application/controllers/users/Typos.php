@@ -74,11 +74,28 @@ class Typos extends CI_Controller {
         return;
     }
 
-    function setTypoStatus($typoId = null, $siteId = null, $status = 0) {
+    /**
+     * Устанавливает статус опечатки, если status = 0, то опечатка отправляется
+     * в архив, при этом автоматического исправления не происходит, иначе
+     * опечатка будет исправлена автоматически.
+     *
+     * Post параметры:
+     * @param int    typoId       Идентификатор опечатки
+     * @param int    siteId       Идентификатор сайта
+     * @param int    accepted     Принято ли исправление опечатки
+     * @param string corrected    Финальный вариант, на который необходимо исправить опечатку
+     * @return CI_Output
+     */
+    function setTypoStatus() {
         $response = [
             "error" => false,
             "message" => "Success"
         ];
+
+        $typoId = intval($this->input->post("typoId"));
+        $siteId = intval($this->input->post("siteId"));
+        $accepted = intval($this->input->post("accepted"));
+        $corrected = $this->input->post("corrected");
 
         if (!$typoId || !$siteId) {
             $response["error"] = true;
@@ -92,16 +109,17 @@ class Typos extends CI_Controller {
 
         $data = [
             "autoCorrection" => true,
-            "status" => $status,
+            "status" => $accepted,
             "id_message" => $typoId,
             "id_site" => $siteId,
-            "login_id" => $this->login_id
+            "login_id" => $this->login_id,
+            "corrected" => $corrected
         ];
 
         // Нужно в любом случае выставить статус 1
         // Но если $status == 0, то необходимо выключить
         // автоисправление текста статьи.
-        if ($status == 0) {
+        if ($accepted == 0) {
             $data["autoCorrection"] = false;
             $data["status"] = true;
         }
@@ -174,7 +192,7 @@ class Typos extends CI_Controller {
         $login_id = $this->login_id;
         
         if  ($oper == 'edit')  {
-            if  ($status != 0 && $status != 1)  {
+            if  ($status != 0 && $status != 1) {
                 $status = 1;
             }
             

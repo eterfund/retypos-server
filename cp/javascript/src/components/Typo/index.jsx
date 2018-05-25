@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Card, CardHeader, CardTitle, CardFooter, CardBody, CardText, Tooltip} from 'reactstrap'
+import EditableText from "../EditableText";
 
 import './style.css'
+
 
 export default class Typo extends Component {
 
@@ -12,6 +14,8 @@ export default class Typo extends Component {
         this.toggleAcceptTooltip = this.toggleAcceptTooltip.bind(this);
 
         this.typo = props.typo;
+        this.acceptCallback = props.acceptCallback.bind(this);
+        this.declineCallback = props.declineCallback.bind(this);
 
         this.state = {
             acceptTooltipOpen: false,
@@ -74,6 +78,10 @@ export default class Typo extends Component {
              </span>`);
     }
 
+    onCorrectedTextUpdated = (corrected) => {
+        this.typo.correctedText = corrected;
+    };
+
     render() {
         const typo = this.typo;
         const {acceptCallback, declineCallback, show} = this.props;
@@ -105,18 +113,21 @@ export default class Typo extends Component {
                 </CardHeader>
 
                 <CardBody>
-                    <CardTitle><del>{typo.originalText}</del> -> {typo.correctedText}</CardTitle>
+                    <CardTitle>
+                        <del>{typo.originalText}</del> ->
+                        <EditableText text={typo.correctedText} onTextSaved={this.onCorrectedTextUpdated}/>
+                    </CardTitle>
 
-                    <CardText dangerouslySetInnerHTML={{__html: this.typo.context}} />
+                    <CardText dangerouslySetInnerHTML={{__html: typo.context}} />
 
                     <div className="card-buttons">
                         <div className="buttons-wrapper">
-                            <button id="acceptTypo" className="accept-button btn btn-warning" onClick={acceptCallback}>Исправить</button>
+                            <button id="acceptTypo" className="accept-button btn btn-warning" onClick={this.applyCorrection}>Исправить</button>
                             <Tooltip placement="left" isOpen={this.state.acceptTooltipOpen}
                                      target="acceptTypo" toggle={this.toggleAcceptTooltip}>
                                 Опечатка будет автоматически исправлена
                             </Tooltip>
-                            <button id="declineTypo" className="decline-button btn btn-danger" onClick={declineCallback}>Отклонить</button>
+                            <button id="declineTypo" className="decline-button btn btn-danger" onClick={this.declineCorrection}>Отклонить</button>
                             <Tooltip placement="right" isOpen={this.state.declineTooltipOpen}
                                      target="declineTypo" toggle={this.toggleDeclineTooltip}>
                                 Опечатка не будет исправлена автоматически
@@ -132,4 +143,11 @@ export default class Typo extends Component {
         );
     }
 
+    applyCorrection = () => {
+        this.acceptCallback(this.typo.correctedText);
+    };
+
+    declineCorrection = () => {
+        this.declineCallback();
+    };
 }

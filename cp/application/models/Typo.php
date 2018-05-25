@@ -251,25 +251,27 @@ class Typo extends CI_Model {
      * @param $data
      */
     function editMessage($data) {
-        if ($this->getMessageRights($data)) {
-            // По умолчанию ошибки исправляются
-            if (!isset($data["autoCorrection"])) {
-                $data["autoCorrection"] = true;
-            }
-
-            if ( $data['status'] && $data["autoCorrection"] ) {
-                $this->correctTypo($data["id_message"]);
-            }
-            
-            $this->db->set("status", $data['status']);
-            $this->db->where("id", $data['id_message']);
-            $this->db->where("site_id", $data['id_site']);
-            $this->db->update("messages");
+        if (!$this->getMessageRights($data)) {
+            return;
         }
+
+        // По умолчанию ошибки исправляются
+        if (!isset($data["autoCorrection"])) {
+            $data["autoCorrection"] = true;
+        }
+
+        if ( $data['status'] && $data["autoCorrection"] ) {
+            $this->correctTypo($data);
+        }
+
+        $this->db->set("status", $data['status']);
+        $this->db->set("comment", $data['corrected']);
+        $this->db->where("id", $data['id_message']);
+        $this->db->where("site_id", $data['id_site']);
+        $this->db->update("messages");
     }
 
     /* Узнать права на сайт */
-
     function getSiteRights($data) {      
         $this->db->select("r.id_site");
         $this->db->from("responsible as r");
@@ -287,7 +289,6 @@ class Typo extends CI_Model {
     }
 
     /* Узнать права пользователя на сообщение */
-
     function getMessageRights($data) {
         $this->db->select("m.id");
         $this->db->from("messages as m, users as u");
@@ -305,14 +306,13 @@ class Typo extends CI_Model {
             return false;
         }
     }
-    
+
     /**
      * Отправляет запрос на исправление ошибки на сервер
-     * 
-     * @param integer $message_id
-     *      Номер сообщения в бд
+     *
+     * @param $data array Информация об опечатке
      */
-    function correctTypo($message_id) {
+    function correctTypo($data) {
         /* TODO: брать из конфига */
         $correctPath = $this->config->item("correction_path");
         $authToken = $this->config->item("typos_password");
@@ -321,14 +321,14 @@ class Typo extends CI_Model {
         /* Получаем исправление */
         $this->db->select("m.link as link, m.text as text, m.comment as comment");
         $this->db->from("messages as m");
-        $this->db->where("m.id", $message_id);
+        $this->db->where("m.id", $data["id_message"]);
         
         $correction = $this->db->get()->row();
         
         /* Получаем адрес необходимого сайта */
         $parsed_url = parse_url($correction->link);
         
-        // Адресс на который шлем запрос исправления
+        // Адрес на который шлем запрос исправления
         $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
         
         /* Посылаем запрос с помощью cUrl */
@@ -343,13 +343,14 @@ class Typo extends CI_Model {
             CURLOPT_PASSWORD => $authToken,
             CURLOPT_POSTFIELDS => array(
                 'text' => $correction->text,
-                'corrected' => $correction->comment,
+                'corrected' => $data["corrected"],
                 'link' => $correction->link
             ),
         ));
 
         log_message("debug", "sending request to $url");
-        
+        log_message("debug", "corrected = {$data["corrected"]}");
+
         if ( !($res = curl_exec($curl)) && curl_errno($curl) != 0 ) {
             log_message("debug", "CorrectTypo errorCode: " . curl_errno($curl));
             log_message("debug", "CorrectTypo errorText: " . curl_error($curl));

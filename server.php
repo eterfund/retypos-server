@@ -133,6 +133,7 @@ if ($email_users) {
 
     $controlPanelUrl = getControlPanelUrl();
 
+    $message_email = "";
     $message_email .= "<p>" . $_language[$code_language]['mail_url'] . " <a href=" . htmlspecialchars($userdata['url']) . ">" . $_language[$code_language]['mail_click_url'] . "</a>" . " (" . $userdata['url'] . ")" . "</p>";
     $message_email .= "<p> <a href='{$controlPanelUrl}'>{$_language[$code_language]['mail_cp_link']}</a></p>";
     $message_email .= "<p>{$_language[$code_language]['mail_text']}: <i>{$userdata['text']}</i></p>";

@@ -1,5 +1,9 @@
 <?php
 
+use JsonRPC\Exception\AccessDeniedException;
+use JsonRPC\Exception\ConnectionFailureException;
+use JsonRPC\Exception\ServerErrorException;
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -262,7 +266,7 @@ class Typo extends CI_Model {
         }
 
         if ( $data['status'] && $data["autoCorrection"] ) {
-            $this->correctTypo($data);
+            $this->correctTypo($data["id_message"], $data["corrected"]);
         }
 
         $this->db->set("status", $data['status']);
@@ -309,64 +313,108 @@ class Typo extends CI_Model {
     }
 
     /**
+     * Отправляет запрос к клиентскому серверу на автоматическое
+     * исправление опечатки. Сервер клиента должен использовать
+     * библиотеку etersoft/typos_client.
+     * Сервер должен быть доступен на хосте клиента по пути  
+     * $this->config->item("correction_path").
+     *
+     * @param int $typoId Идентификатор опечатки
+     * @param string $corrected Исправленный вариант
+     * @throws Exception Если произошла ошибка
+     */
+    function correctTypo(int $typoId, string $corrected) {
+        $correctPath = $this->config->item("correction_path");
+
+        /* Получаем исправление */
+        $this->db->select("m.link as link, m.text as text, m.comment as comment, m.context as context");
+        $this->db->from("messages as m");
+        $this->db->where("m.id", $typoId);
+
+        $correction = $this->db->get()->row();
+
+        /* Получаем адрес необходимого сайта */
+        $parsed_url = parse_url($correction->link);
+
+        // Адрес на который шлем запрос исправления
+        $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+
+        try {
+            $client = new \JsonRPC\Client($url);
+            $client->getHttpClient()->withDebug();
+
+            $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
+        } catch(ConnectionFailureException $e) {
+            throw new Exception("Не удалось подключиться к серверу исправления опечаток", 503);
+        } catch(AccessDeniedException $e) {
+            throw new Exception("Не удалось авторизироваться у сервера исправления опечаток", 401);
+        } catch(ServerErrorException $e) {
+            throw new Exception("Ошибка автоматического исправления опечатки на сервере", 500);
+        } catch(Exception $e) {
+            log_message("error", "Ошибка при исправлении опечатки: {$e->getMessage()}");
+            throw new Exception("Произошла неизвестная ошибка, попробуйте повторить попытку позже", 500);
+        }
+    }
+
+    /**
      * Отправляет запрос на исправление ошибки на сервер
      *
      * @param $data array Информация об опечатке
      * @throws Exception Если произошла ошибка
      */
-    function correctTypo($data) {
-        $correctPath = $this->config->item("correction_path");
-        $authToken = $this->config->item("typos_password");
-        $username = $this->config->item("typos_user");
-        
-        /* Получаем исправление */
-        $this->db->select("m.link as link, m.text as text, m.comment as comment");
-        $this->db->from("messages as m");
-        $this->db->where("m.id", $data["id_message"]);
-        
-        $correction = $this->db->get()->row();
-        
-        /* Получаем адрес необходимого сайта */
-        $parsed_url = parse_url($correction->link);
-        
-        // Адрес на который шлем запрос исправления
-        $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
-        
-        /* Посылаем запрос с помощью cUrl */
-        $curl = curl_init($url);
-        
-        curl_setopt_array($curl, array(
-            CURLOPT_USE_SSL => true, 
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_FAILONERROR => true,
-            CURLOPT_USERNAME => $username,
-            CURLOPT_PASSWORD => $authToken,
-            CURLOPT_POSTFIELDS => array(
-                'text' => $correction->text,
-                'corrected' => $data["corrected"],
-                'link' => $correction->link
-            ),
-        ));
-
-        log_message("debug", "sending request to $url");
-        log_message("debug", "corrected = {$data["corrected"]}");
-
-        if ( !($res = curl_exec($curl)) && curl_errno($curl) != 0 ) {
-            $errorCode = curl_errno($curl);
-            $errorText = curl_error($curl);
-
-            log_message("debug", "CorrectTypo errorCode: " . $errorCode);
-            log_message("debug", "CorrectTypo errorText: " . $errorText);
-
-            throw $this->getExceptionForCurlError($errorCode, $url);
-        }
-        
-        log_message("debug", "response taken");
-        log_message("debug", "Response from $url: $res");
-        
-        curl_close($curl);
-    }
+//    function correctTypo($data) {
+//        $correctPath = $this->config->item("correction_path");
+//        $authToken = $this->config->item("typos_password");
+//        $username = $this->config->item("typos_user");
+//
+//        /* Получаем исправление */
+//        $this->db->select("m.link as link, m.text as text, m.comment as comment");
+//        $this->db->from("messages as m");
+//        $this->db->where("m.id", $data["id_message"]);
+//
+//        $correction = $this->db->get()->row();
+//
+//        /* Получаем адрес необходимого сайта */
+//        $parsed_url = parse_url($correction->link);
+//
+//        // Адрес на который шлем запрос исправления
+//        $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+//
+//        /* Посылаем запрос с помощью cUrl */
+//        $curl = curl_init($url);
+//
+//        curl_setopt_array($curl, array(
+//            CURLOPT_USE_SSL => true,
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_POST => true,
+//            CURLOPT_FAILONERROR => true,
+//            CURLOPT_USERNAME => $username,
+//            CURLOPT_PASSWORD => $authToken,
+//            CURLOPT_POSTFIELDS => array(
+//                'text' => $correction->text,
+//                'corrected' => $data["corrected"],
+//                'link' => $correction->link
+//            ),
+//        ));
+//
+//        log_message("debug", "sending request to $url");
+//        log_message("debug", "corrected = {$data["corrected"]}");
+//
+//        if ( !($res = curl_exec($curl)) && curl_errno($curl) != 0 ) {
+//            $errorCode = curl_errno($curl);
+//            $errorText = curl_error($curl);
+//
+//            log_message("debug", "CorrectTypo errorCode: " . $errorCode);
+//            log_message("debug", "CorrectTypo errorText: " . $errorText);
+//
+//            throw $this->getExceptionForCurlError($errorCode, $url);
+//        }
+//
+//        log_message("debug", "response taken");
+//        log_message("debug", "Response from $url: $res");
+//
+//        curl_close($curl);
+//    }
 
     /**
      * Создает исключение, которое описывает ошибку запроса curl

@@ -125,7 +125,17 @@ if ($email_users) {
     try {
         $data = array('NULL', $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['comment'], 0);
         $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
-        $STH->execute($data);
+        $result = $STH->execute($data);
+
+        if ($result !== true) {
+            $errorInfo = $STH->errorInfo();
+            error_log("Возникла ошибка при добавлении опечатки в базу данных. Код SQLSTATE: {$errorInfo[0]}. 
+            Код ошибки драйвера: {$errorInfo[1]}. Текст ошибки: {$errorInfo[2]}");
+
+            echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_database']));
+            return;
+        }
+
     } catch (PDOException $e) {
         echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['error_database']));
         return;

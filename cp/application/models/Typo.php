@@ -193,7 +193,7 @@ class Typo extends CI_Model {
      * @return array Список опечаток
      */
     function getSiteTypos($siteId) {
-        $this->db->select("id, link, text as originalText, context, comment as correctedText, date, status as isCorrected");
+        $this->db->select("id, link, text as originalText, context, corrected as correctedText, comment, date, status as isCorrected");
         $this->db->from("messages");
         $this->db->where("site_id", $siteId);
         $this->db->where("status", 0);
@@ -338,6 +338,8 @@ class Typo extends CI_Model {
 
         // Адрес на который шлем запрос исправления
         $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+
+        $url = "http://ambulance.pubsandbox.eterhost.ru/typosClientTest/index.php";
 
         try {
             $client = new \JsonRPC\Client($url);

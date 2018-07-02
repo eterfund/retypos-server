@@ -25,6 +25,7 @@ $error = '';
 $userdata = array(
     'url' => '',
     'text' => '',
+    'corrected' => '',
     'context' => '',
     'comment' => '',
     'old_browser' => 0
@@ -64,6 +65,7 @@ if (!validate()) {
 //TODO - работу со старыми бразуерами будем подерживать или нет? Если будем, то надо доработать работу на стороне сервера (закрытие окна)
 $userdata['old_browser'] = getRequest('old_browser', 0);
 $userdata['comment'] = htmlspecialchars(rawurldecode(getRequest('comment', '')));
+$userdata['corrected'] = htmlspecialchars(rawurldecode(getRequest('corrected', '')));
 $userdata['url'] = getFormatingUrl(rawurldecode(getRequest('url', '')));
 $userdata['text'] = htmlspecialchars(rawurldecode(getRequest('text', '')));
 $userdata['context'] = htmlspecialchars(rawurldecode(getRequest('context', '')));
@@ -123,8 +125,8 @@ try {
 /* Если активных пользователей за сайт нет, то возвращаем сообщение об ошибке */
 if ($email_users) {
     try {
-        $data = array(null, $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['comment'], 0);
-        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
+        $data = array(null, $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['corrected'], $userdata['comment'], 0);
+        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, corrected, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
         $result = $STH->execute($data);
 
         if ($result !== true) {
@@ -147,7 +149,7 @@ if ($email_users) {
     $message_email .= "<p>" . $_language[$code_language]['mail_url'] . " <a href=" . htmlspecialchars($userdata['url']) . ">" . $_language[$code_language]['mail_click_url'] . "</a>" . " (" . $userdata['url'] . ")" . "</p>";
     $message_email .= "<p> <a href='{$controlPanelUrl}'>{$_language[$code_language]['mail_cp_link']}</a></p>";
     $message_email .= "<p>{$_language[$code_language]['mail_text']}: <i>{$userdata['text']}</i></p>";
-    $message_email .= "<p>{$_language[$code_language]['mail_comment']}: <i>{$userdata['comment']}</i></p>";
+    $message_email .= "<p>{$_language[$code_language]['mail_comment']}: <i>{$userdata['corrected']}</i></p>";
     $message_email .= "<p>{$_language[$code_language]['mail_context']}: \"{$userdata['context']}\"</p>";
 
     $subject = '=?utf-8?B?' . base64_encode($_language[$code_language]['mail_subject']) . '?=';

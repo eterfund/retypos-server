@@ -123,7 +123,7 @@ try {
 /* Если активных пользователей за сайт нет, то возвращаем сообщение об ошибке */
 if ($email_users) {
     try {
-        $data = array('NULL', $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['comment'], 0);
+        $data = array(null, $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['comment'], 0);
         $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
         $result = $STH->execute($data);
 

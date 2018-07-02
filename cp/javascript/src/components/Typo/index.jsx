@@ -64,7 +64,7 @@ export default class Typo extends Component {
     _highlightTypoInContext() {
         const original = this._escapeHtml(this.typo.originalText);
         const corrected = this._escapeHtml(this.typo.correctedText);
-        const comment = this._escapeHtml(this.typo.comment);
+
         const context = this._escapeHtml(this.typo.context);
 
         // Экранируем символы, которые мешают использовать регулярные выражения
@@ -137,7 +137,7 @@ export default class Typo extends Component {
                     </div>
                 </CardBody>
                 <CardFooter>
-                    <p>Тут должен отображаться комментарий</p>
+                    <p>Комментарий: "{typo.comment}"</p>
                     Добавлена <small>{typo.date}</small>
                 </CardFooter>
             </Card>

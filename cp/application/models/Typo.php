@@ -325,6 +325,8 @@ class Typo extends CI_Model {
      */
     function correctTypo(int $typoId, string $corrected) {
         $correctPath = $this->config->item("correction_path");
+        $user = $this->config->item("typos_user");
+        $password = $this->config->item("typos_password");
 
         /* Получаем исправление */
         $this->db->select("m.link as link, m.text as text, m.comment as comment, m.context as context");
@@ -341,7 +343,9 @@ class Typo extends CI_Model {
 
         try {
             $client = new \JsonRPC\Client($url);
-            $client->getHttpClient()->withDebug();
+            $client->getHttpClient()->withDebug()
+                ->withUsername($user)
+                ->withPassword($password);
 
             $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
         } catch(ConnectionFailureException $e) {

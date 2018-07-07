@@ -339,8 +339,6 @@ class Typo extends CI_Model {
         // Адрес на который шлем запрос исправления
         $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
 
-        $url = "http://ambulance.pubsandbox.eterhost.ru/typosClientTest/index.php";
-
         try {
             $client = new \JsonRPC\Client($url);
             $client->getHttpClient()->withDebug();

@@ -1,5 +1,6 @@
 cp/application/config/config.php
 cp/application/config/database.php
+cp/application/config/typos_config.php
 configuration.php
 
 # IDE Files

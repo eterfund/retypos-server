@@ -19,8 +19,8 @@ class Authorization extends CI_Controller {
     function __construct() {
         parent::__construct();
         
-        $this->data['auth_url'] = "authorization/check";
-        $this->view_name = 'authorization/index';
+        $this->data['auth_url'] = site_url("/authorization/check");
+        $this->view_name = '/authorization/index';
         
         $this->load->model('userHelper');
     }

@@ -26,7 +26,7 @@ jQuery("#table_users").jqGrid({ // Привязка плагина к табли
 				{name:"firstname", index:"u.firstname", width:80, sortable:true, searchtype:"string", align:'center', editable:true, editrules:{required:true}},
 				{name:"middlename", index:"u.middlename", width:80, sortable:true, searchtype:"string", align:'center', editable:true, editrules:{required:true}},
 				{name:"lastname", index:"u.lastname", width:80, sortable:true, searchtype:"string", align:'center', editable:true, editrules:{required:true}},
-				{name:"activity", index:"u.activity", width:80, sortable:true, searchtype:"integer", align:'center', editable:true, edittype:"checkbox", editoptions: {value:"1:0", defaultValue:'0'}, formatter:'checkbox'},
+				{name:"activity", index:"u.activity", width:80, sortable:true, searchtype:"integer", align:'center', editable:true, edittype:"checkbox", editoptions: {value:"1:0", defaultValue:"1"}, formatter:'checkbox'},
                 {name:"date", index:"u.date", width:120, sortable:true, searchtype:"string", align:'center'},
 			],
             

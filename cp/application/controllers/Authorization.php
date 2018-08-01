@@ -97,6 +97,11 @@ class Authorization extends CI_Controller {
                     }  else if  ($user_info->type == 'user')  {
                         redirect('users/typos/');
                     }
+                } else {
+                    $this->error_login();
+                    $this->data['error_message'] = "Аккаунт заблокирован";
+                    $this->load->view($this->view_name, $this->data);
+                    return;
                 }
             }  else  {
                 $this->error_login();

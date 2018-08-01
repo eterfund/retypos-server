@@ -347,7 +347,15 @@ class Typo extends CI_Model {
                 ->withUsername($user)
                 ->withPassword($password);
 
-            $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
+            $result = $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
+
+            if (!isset($result["status"])) {
+                throw new Exception("Неправильный ответ сервера");
+            }
+
+            if ($result["status"] != "success") {
+                throw new Exception("Не удалось исправить опечатку: ". $result["message"]);
+            }
         } catch(ConnectionFailureException $e) {
             throw new Exception("Не удалось подключиться к серверу исправления опечаток", 503);
         } catch(AccessDeniedException $e) {

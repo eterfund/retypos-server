@@ -26,7 +26,8 @@ body {
 }
 
 .footer  {
-    position: absolute;
+    color: black;
+    position: fixed;
     bottom: 0;
     width: 100%;
     text-align: center;
@@ -34,6 +35,8 @@ body {
 
 .footer .copyright {
     font-size: 80%;
+    float: right;
+    margin-right: 10px;
 }
 
 .typo {
@@ -59,9 +62,14 @@ li.nav-item {
     border-radius: 0 !important;
 }
 
-li.nav-item:hover {
-    border-bottom: 1px solid #007bff;
-    border-radius: 0 !important;
+li.nav-item > a.nav-link {
+    transition-property: background-color;
+    transition-duration: 0.8s;
+}
+
+li.nav-item > a.nav-link:hover {
+    background-color: #ffd556;
+    border-radius: 0.25em;
 }
 
 a.nav-link.active {

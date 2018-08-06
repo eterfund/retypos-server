@@ -13,8 +13,8 @@ const alertify = require("alertify.js");
 
 export default class TypoList extends Component {
     state = {
-        currentTypo: 0,
         siteId: 0,
+        resolvedTypos: []
     };
 
     /**
@@ -31,7 +31,7 @@ export default class TypoList extends Component {
                     alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
                         <p>Исправления применены к тексту, содержащему опечатку.</p>`);
 
-                    this.state.currentTypo++;
+                    this.state.resolvedTypos.push(typoId)
                     this._decrementSiteTyposCount();
                     this.forceUpdate();
                     return;
@@ -54,7 +54,8 @@ export default class TypoList extends Component {
         this._setTypoStatus(0, typoId, this.state.siteId)
             .done(() => {
                 alertify.success(`Опечатка ${typoId} была отклонена`);
-                this.state.currentTypo++;
+                
+                this.state.resolvedTypos.push(typoId)
                 this._decrementSiteTyposCount();
                 this.forceUpdate();
             })
@@ -112,13 +113,13 @@ export default class TypoList extends Component {
 
         console.log("Render typolist for site " + this.state.siteId);
 
-        if (typos.length === 0 || this.state.currentTypo >= typos.length) {
+        if (typos.length === 0 || this.state.resolvedTypos.length >= typos.length) {
             return TypoList._displayEmptyMessage();
         }
 
         const typoCards = typos.map((typo, index) =>
             <Typo key={typo.id} typo={typo}
-                  show={this.state.currentTypo === index}
+                  show={!this.state.resolvedTypos.includes(typo.id)}
                   acceptCallback={this.acceptCorrection.bind(this, typo.id)}
                   declineCallback={this.declineCorrection.bind(this, typo.id)}/>
         );

@@ -96,16 +96,16 @@ export default class Typo extends Component {
         if (show) {
             console.log("Render typo #" + typo.id);
         } else {
-            console.log("Render hidden typo #" + typo.id);
+            return null;
         }
 
         if (!this.state.textHighlighted) {
             this._highlightTypoInContext();
             this.state.textHighlighted = true;
-        }
+        }   
 
         return (
-            <Card className={className}>
+            <Card id={`typo-${typo.id}`} className={className}>
                 <CardHeader>
                     Опечатка #{typo.id}
                     <span id="typo-id">
@@ -144,11 +144,25 @@ export default class Typo extends Component {
         );
     }
 
+    /**
+     * Hides typo card 
+     */
+    hideTypoCard(completeFunc) {
+        $(`#typo-${this.typo.id}`).animate({
+            marginLeft: "3000px",
+            opacity: 0
+        }, 500, completeFunc);
+    }
+
     applyCorrection = () => {
-        this.acceptCallback(this.typo.correctedText);
+        this.hideTypoCard(() => {
+            this.acceptCallback(this.typo.correctedText);
+        });
     };
 
     declineCorrection = () => {
-        this.declineCallback();
+        this.hideTypoCard(() => {
+            this.declineCallback();
+        });
     };
 }

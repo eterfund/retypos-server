@@ -1,6 +1,7 @@
 .TypoCard {
     width: 80%;
     margin: 0 auto;
+    margin-bottom: 25px;
 }
 
 .TypoCard .card-body {

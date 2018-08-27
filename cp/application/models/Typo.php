@@ -349,12 +349,12 @@ class Typo extends CI_Model {
 
             $result = $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
 
-            if (!isset($result["status"])) {
-                throw new Exception("Неправильный ответ сервера");
+            if (!isset($result["errorCode"])) {
+                throw new Exception("Неправильный ответ сервера", 500);
             }
 
-            if ($result["status"] != "success") {
-                throw new Exception("Не удалось исправить опечатку: ". $result["message"]);
+            if ($result["errorCode"] != 200) {
+                throw new Exception($result["message"], $result["errorCode"]);
             }
         } catch(ConnectionFailureException $e) {
             throw new Exception("Не удалось подключиться к серверу исправления опечаток", 503);
@@ -363,7 +363,7 @@ class Typo extends CI_Model {
         } catch(ServerErrorException $e) {
             throw new Exception("Ошибка автоматического исправления опечатки на сервере", 500);
         } catch(Exception $e) {
-            log_message("error", "Ошибка при исправлении опечатки: {$e->getMessage()}");
+            log_message("error", "Ошибка при исправлении опечатки: {$e->getMessage()} (код {$e->getCode()})");
             throw new Exception($this->getExceptionStringForCode($e->getCode()), $e->getCode());
         }
     }
@@ -379,9 +379,12 @@ class Typo extends CI_Model {
         switch ($errorCode) {
             case 404:
                 return "Ошибка в тексте не найдена. Возможно, она уже была исправлена. Проверьте вручную";
-                break;
+            case 405:
+                return "Ошибка. Контекст статьи изменился, автоматическое исправление недоступно. Внесите изменения вручную";
+            case 208:
+                return "Опечатка уже была исправлена автоматически. Изменения применены к тексту";
             default:
-                return "Произошла неизвестная ошибка, попробуйте повторить попытку позже";
+                return "Произошла неизвестная ошибка на сервере, попробуйте повторить попытку позже";
         }
     }
 

@@ -364,7 +364,24 @@ class Typo extends CI_Model {
             throw new Exception("Ошибка автоматического исправления опечатки на сервере", 500);
         } catch(Exception $e) {
             log_message("error", "Ошибка при исправлении опечатки: {$e->getMessage()}");
-            throw new Exception("Произошла неизвестная ошибка, попробуйте повторить попытку позже", 500);
+            throw new Exception($this->getExceptionStringForCode($e->getCode()), $e->getCode());
+        }
+    }
+
+    /**
+     * Возвращает читабельную строку для отображения пользователю,
+     * содержащую описание ошибки
+     *
+     * @param $errorCode integer Код ошибки
+     * @return string Сообщение об ошибке на русском языке
+     */
+    private function getExceptionStringForCode($errorCode) {
+        switch ($errorCode) {
+            case 404:
+                return "Ошибка в тексте не найдена. Возможно, она уже была исправлена. Проверьте вручную";
+                break;
+            default:
+                return "Произошла неизвестная ошибка, попробуйте повторить попытку позже";
         }
     }
 

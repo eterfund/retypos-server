@@ -34,13 +34,15 @@ export default class TypoList extends Component {
                     this.state.resolvedTypos.push(typoId)
                     this._decrementSiteTyposCount();
                     this.forceUpdate();
-                    return;
+                    return true;
                 }
 
                 alertify.error(response.message);
+                return false;
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");
+                return false;
             })
     }
 
@@ -55,12 +57,15 @@ export default class TypoList extends Component {
             .done(() => {
                 alertify.success(`Опечатка ${typoId} была отклонена`);
                 
-                this.state.resolvedTypos.push(typoId)
+                this.state.resolvedTypos.push(typoId);
                 this._decrementSiteTyposCount();
                 this.forceUpdate();
+
+                return true;
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");
+                return false;
             });
     }
 

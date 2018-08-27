@@ -147,22 +147,18 @@ export default class Typo extends Component {
     /**
      * Hides typo card 
      */
-    hideTypoCard(completeFunc) {
-        $(`#typo-${this.typo.id}`).animate({
-            marginLeft: "3000px",
-            opacity: 0
-        }, 500, completeFunc);
-    }
+    // hideTypoCard() {
+    //     $(`#typo-${this.typo.id}`).animate({
+    //         marginLeft: "3000px",
+    //         opacity: 0
+    //     }, 500);
+    // }
 
     applyCorrection = () => {
-        this.hideTypoCard(() => {
-            this.acceptCallback(this.typo.correctedText);
-        });
+        let success = this.acceptCallback(this.typo.correctedText);
     };
 
     declineCorrection = () => {
-        this.hideTypoCard(() => {
-            this.declineCallback();
-        });
+        let success = this.declineCallback();
     };
 }

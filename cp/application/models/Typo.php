@@ -197,6 +197,7 @@ class Typo extends CI_Model {
         $this->db->from("messages");
         $this->db->where("site_id", $siteId);
         $this->db->where("status", 0);
+        $this->db->order_by("date", "DESC");
         return $this->db->get()->result();
     }
 

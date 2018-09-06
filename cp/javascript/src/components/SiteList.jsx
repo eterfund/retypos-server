@@ -1,6 +1,8 @@
 import React from 'react'
 import {Nav, NavItem, NavLink, TabContent, TabPane, Alert, Badge} from "reactstrap";
 import TypoList from "./TypoList/";
+import FaRefresh from 'react-icons/lib/fa/refresh';
+
 
 export default class SiteList extends React.Component {
 
@@ -8,7 +10,6 @@ export default class SiteList extends React.Component {
         super(props);
 
         this.sites = this.props.sites;
-
         this.state = {
             activeTab: 0,
             error: false,
@@ -16,6 +17,10 @@ export default class SiteList extends React.Component {
 
         this.typos = [];
 
+        this.updateTyposForActiveSite();
+    }
+
+    updateTyposForActiveSite = () => {
         this.loadSiteTypos(this.state.activeTab, () =>
             this.forceUpdate()
         );
@@ -62,6 +67,9 @@ export default class SiteList extends React.Component {
                         {this.typos.length}
                     </Badge>
                 </NavLink>
+                {this.state.activeTab === index ?
+                    <FaRefresh className="refresh-site" title="Обновить" onClick={this.updateTyposForActiveSite} /> :
+                    null}
             </NavItem>
         );
 
@@ -86,7 +94,7 @@ export default class SiteList extends React.Component {
             if (this.state.activeTab === index) {
                 return (
                     <TabPane key={index} tabId={index}>
-                        <TypoList siteId={site.id} typos={this.typos}/>
+                        <TypoList siteId={site.id} typos={this.typos} />
                     </TabPane>
                 );
             } else { // Если не активная вкладка - то не рендерим содержимое

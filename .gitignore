@@ -8,3 +8,5 @@ configuration.php
 /nbproject/
 .idea/*
 .vscode/
+
+/vendor/

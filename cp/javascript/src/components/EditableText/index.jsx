@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import FaCheckCircle from 'react-icons/lib/fa/check-circle';
 import FaTimesCircle from 'react-icons/lib/fa/times-circle';
+import FaEdit from 'react-icons/lib/fa/edit';
 
 import './style.css'
 
@@ -41,11 +42,11 @@ export default class EditableText extends Component {
         }
 
         return (
-          <span onClick={this.enableEditing.bind(this)}>{this.text}</span>
+            <span>{this.text} <FaEdit className="text-editable-button" onClick={this.enableEditing} /></span>
         );
     }
 
-    enableEditing() {
+    enableEditing = () => {
         this.setState({
             isEditable: true
         });

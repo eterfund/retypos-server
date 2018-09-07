@@ -76,6 +76,13 @@ class Typos extends CI_Controller {
         return;
     }
 
+    private function createJsonResponse($data, int $status = 200) {
+        $this->output
+            ->set_content_type('application/json')
+            ->set_status_header($status)
+            ->set_output(json_encode($data));
+    }
+
     /**
      * Устанавливает статус опечатки, если status = 0, то опечатка отправляется
      * в архив, при этом автоматического исправления не происходит, иначе
@@ -133,10 +140,32 @@ class Typos extends CI_Controller {
             $response["message"] = $e->getMessage();
         }
 
-        return $this->output
-            ->set_content_type('application/json')
-            ->set_status_header(200)
-            ->set_output(json_encode($response));
+        return $this->createJsonResponse($data);
+    }
+
+    /**
+     * Получает ссылку на редактирование статьи и возвращает её
+     *
+     * @return string JSON массив, по ключу editUrl находится url для редактирования статьи
+     */
+    function getEditUrl() {
+        if (!$this->input->get("typoId")) {
+            return $this->createJsonResponse("", 400);
+        }
+
+        $typoId = intval($this->input->get("typoId"));
+
+        $response = [
+            "editUrl" => ""
+        ];
+
+        try {
+            $response["editUrl"] = $this->typo->getArticleEditUrl($typoId);
+        } catch (Exception $e) {
+            log_message("error", `Failed to get article edit url: {$e->getMessage()}`);
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     /**

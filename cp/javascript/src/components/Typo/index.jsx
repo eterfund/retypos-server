@@ -4,6 +4,7 @@ import EditableText from "../EditableText";
 
 import './style.css'
 
+import 'whatwg-fetch'
 
 export default class Typo extends Component {
 
@@ -22,6 +23,33 @@ export default class Typo extends Component {
             declineTooltipOpen: false,
             textHighlighted: false,
         };
+    }
+
+    /**
+     * Запрашивает с сервера ссылку на редактирование статьи и устанавливает element.href равным
+     * полученной ссылке.
+     *
+     * Метод setEditLink вызывается по событию onMouseOver карточки для того, чтобы
+     * избежать большого числа запросов серверу. Если карточек много, то будет выполнено
+     * довольно много запросов. OnMouseOver позволяет снизить кол-во запросов и нагрузку
+     * на адаптер.
+     */
+    setEditLink = async (element) => {
+        let queryString = `?typoId=${this.typo.id}`;
+        let result = await fetch(`${window.baseUrl}/users/typos/getEditUrl${queryString}`, {
+            method: "GET",
+            credentials: 'include'
+        });
+
+        console.log(result);
+
+        let resultJson = await result.json();
+        const editUrl = resultJson.editUrl;
+
+        // Задаем ссылку
+        element.href = editUrl;
+
+        return false;
     }
 
     /**
@@ -139,6 +167,8 @@ export default class Typo extends Component {
                 <CardFooter>
                     <p>Комментарий: "{typo.comment}"</p>
                     Добавлена <small>{typo.date}</small>
+                    <a id="typo-edit" className="link" target={"_blank"}
+                       onMouseOver={(e) => this.setEditLink(e.target)}>Редактировать статью</a>
                 </CardFooter>
             </Card>
         );

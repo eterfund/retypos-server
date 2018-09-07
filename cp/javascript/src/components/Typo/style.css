@@ -36,3 +36,10 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+#typo-edit {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 80%;
+}

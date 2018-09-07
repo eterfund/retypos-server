@@ -4,7 +4,7 @@ const webpack = require("webpack");
 module.exports = {
     entry: [
         // Application code
-        "./javascript/src/typos.jsx",
+        "./javascript/src/typos.jsx"
     ],
 
     output: {

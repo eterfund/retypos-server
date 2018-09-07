@@ -314,6 +314,68 @@ class Typo extends CI_Model {
     }
 
     /**
+     * По заданной ссылке на статью возвращает ссылку на адаптер сайта
+     *
+     * @param string $link Ссылка на статью
+     * @return string URL адаптера JSON RPC
+     */
+    private function getTyposAdapterUrl(string $link) {
+        $correctPath = $this->config->item("correction_path");
+
+        /* Получаем адрес необходимого сайта */
+        $parsed_url = parse_url($link);
+
+        // Адрес на который шлем запрос исправления
+        return $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+    }
+
+    /**
+     * Creates and returns a connection with adapter by JSON RPC protocol
+     *
+     * @param string $adapterUrl Url on which an adapter listen
+     * @return \JsonRPC\Client Connection with an adapter
+     */
+    function createConnectionWithAdapter(string $adapterUrl) {
+        $user = $this->config->item("typos_user");
+        $password = $this->config->item("typos_password");
+
+        $client = new \JsonRPC\Client($adapterUrl);
+        $client->getHttpClient()->withDebug()
+            ->withUsername($user)
+            ->withPassword($password);
+
+        return $client;
+    }
+
+    /**
+     * Отправляет запрос к адаптеру на получение ссылки на редактирование
+     * статьи.
+     *
+     * @param int $messageId
+     *
+     * @throws Exception Если что-либо пошло не так
+     * @return string URL редактирования статьи или же null в случае ошибки
+     */
+    public function getArticleEditUrl(int $messageId) {
+        $this->db->select("link");
+        $this->db->from("messages");
+        $this->db->where("id", $messageId);
+
+        $link = $this->db->get()->row()->link;
+
+        $url = $this->getTyposAdapterUrl($link);
+
+        $client = $this->createConnectionWithAdapter($url);
+        $editLink = $client->getEditLink($link);
+
+        if (!isset($editLink["errorCode"]) || $editLink["errorCode"] != 200) {
+            throw new Exception($editLink["message"], $editLink["errorCode"]);
+        }
+
+        return $editLink["message"];
+    }
+
+    /**
      * Отправляет запрос к клиентскому серверу на автоматическое
      * исправление опечатки. Сервер клиента должен использовать
      * библиотеку etersoft/typos_client.
@@ -325,10 +387,6 @@ class Typo extends CI_Model {
      * @throws Exception Если произошла ошибка
      */
     function correctTypo(int $typoId, string $corrected) {
-        $correctPath = $this->config->item("correction_path");
-        $user = $this->config->item("typos_user");
-        $password = $this->config->item("typos_password");
-
         /* Получаем исправление */
         $this->db->select("m.link as link, m.text as text, m.comment as comment, m.context as context");
         $this->db->from("messages as m");
@@ -336,17 +394,10 @@ class Typo extends CI_Model {
 
         $correction = $this->db->get()->row();
 
-        /* Получаем адрес необходимого сайта */
-        $parsed_url = parse_url($correction->link);
-
-        // Адрес на который шлем запрос исправления
-        $url = $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+        $url = $this->getTyposAdapterUrl($correction->link);
 
         try {
-            $client = new \JsonRPC\Client($url);
-            $client->getHttpClient()->withDebug()
-                ->withUsername($user)
-                ->withPassword($password);
+            $client = $this->createConnectionWithAdapter($url);
 
             $result = $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
 

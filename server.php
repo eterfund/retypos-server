@@ -125,8 +125,8 @@ try {
 /* Если активных пользователей за сайт нет, то возвращаем сообщение об ошибке */
 if ($email_users) {
     try {
-        $data = array(null, $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['corrected'], $userdata['comment'], 0);
-        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, corrected, comment, date, status) VALUES (?, ?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?)");
+        $data = array(null, $email_users[0]['id_site'], $userdata['url'], $userdata['text'], $userdata['context'], $userdata['corrected'], $userdata['comment'], 0, getIp());
+        $STH = $DBH->prepare("INSERT INTO messages (id, site_id, link, text, context, corrected, comment, date, status, user_ip) VALUES (?, ?, ?, ?, ?, ?, ?, DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s'), ?, ?)");
         $result = $STH->execute($data);
 
         if ($result !== true) {

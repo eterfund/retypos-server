@@ -140,7 +140,7 @@ class Typos extends CI_Controller {
             $response["message"] = $e->getMessage();
         }
 
-        return $this->createJsonResponse($data);
+        return $this->createJsonResponse($response);
     }
 
     /**

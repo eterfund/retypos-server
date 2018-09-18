@@ -79,7 +79,7 @@ export default class SiteList extends React.Component {
 
     removeTypoFromList = (typoId) => {
         this.setState({
-            typos: this.state.typos.filter((typo) => {typo.id !== typoId})
+            typos: this.state.typos.filter((typo) => typo.id !== typoId)
         });
     }
 

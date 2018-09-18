@@ -11,13 +11,14 @@ export default class SiteList extends React.Component {
         super(props);
 
         this.sites = this.props.sites;
+
+        console.log("Render SiteList");
         this.state = {
             activeTab: 0,
             error: false,
-            refreshing: true
+            refreshing: true,
+            typos: []
         };
-
-        this.typos = [];
 
         // Настройка прогресс бара
         TopBarProgress.config({
@@ -59,7 +60,9 @@ export default class SiteList extends React.Component {
         $.ajax({
             url: `${window.baseUrl}/users/typos/getSiteTypos/${this.sites[siteId].id}`,
         }).done((typos) => {
-            this.typos = typos;
+            this.setState({
+                typos: typos
+            });
 
             if (done) {
                 done();
@@ -74,6 +77,12 @@ export default class SiteList extends React.Component {
         });
     }
 
+    removeTypoFromList = (typoId) => {
+        this.setState({
+            typos: this.state.typos.filter((typo) => {typo.id !== typoId})
+        });
+    }
+
     render() {
         const tabItems = this.sites.map((site, index) =>
             <NavItem key={index}>
@@ -83,7 +92,7 @@ export default class SiteList extends React.Component {
 
                     <Badge id={site.id + "-typos-count"} className={"typos-count"}
                            hidden={this.state.activeTab !== index}>
-                        {this.typos.length}
+                        {this.state.typos.length}
                     </Badge>
                 </NavLink>
                 {this.state.activeTab === index &&
@@ -113,7 +122,7 @@ export default class SiteList extends React.Component {
             if (this.state.activeTab === index) {
                 return (
                     <TabPane key={index} tabId={index}>
-                        <TypoList siteId={site.id} typos={this.typos} />
+                        <TypoList siteId={site.id} typos={this.state.typos} removeTypoCallback={this.removeTypoFromList}/>
                     </TabPane>
                 );
             } else { // Если не активная вкладка - то не рендерим содержимое

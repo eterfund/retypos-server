@@ -112,19 +112,12 @@ export default class Typo extends Component {
 
     render() {
         const typo = this.typo;
-        const {show} = this.props;
 
-        const display = show ? "d-block" : "d-none";
+        const display = "d-block";
         const textColor = "text-white";
         const backgroundColor = "bg-primary";
 
         const className = `TypoCard text-center ${display} ${backgroundColor} ${textColor}`;
-
-        if (show) {
-            console.log("Render typo #" + typo.id);
-        } else {
-            return null;
-        }
 
         if (!this.state.textHighlighted) {
             this._highlightTypoInContext();

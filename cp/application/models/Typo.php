@@ -398,7 +398,7 @@ class Typo extends CI_Model {
 
         try {
             $client = $this->createConnectionWithAdapter($url);
-
+            
             $result = $client->fixTypo($correction->text, $corrected, $correction->context, $correction->link);
 
             if (!isset($result["errorCode"])) {

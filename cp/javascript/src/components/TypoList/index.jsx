@@ -13,11 +13,18 @@ import './style.css'
 const alertify = require("alertify.js");
 
 export default class TypoList extends Component {
-    state = {
-        loading: false,
-        siteId: 0,
-        resolvedTypos: []
-    };
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: false,
+            siteId: this.props.siteId,
+        };
+
+        this.removeTypo = this.props.removeTypoCallback.bind(this);
+
+        console.log("Construct(TypoList):", this);
+    }
 
     /**
      * Одобряет исправление опечатки
@@ -37,8 +44,7 @@ export default class TypoList extends Component {
                     alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
                         <p>Исправления применены к тексту, содержащему опечатку.</p>`);
 
-                    this.state.resolvedTypos.push(typoId);
-                    this._decrementSiteTyposCount();
+                    this.removeTypo(typoId);
                 } else {
                     alertify.error(response.message);
                 }
@@ -66,9 +72,7 @@ export default class TypoList extends Component {
         this._setTypoStatus(0, typoId, this.state.siteId)
             .done(() => {
                 alertify.success(`Опечатка ${typoId} была отклонена`);
-                
-                this.state.resolvedTypos.push(typoId);
-                this._decrementSiteTyposCount();
+                this.removeTypo(typoId);
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");
@@ -121,20 +125,18 @@ export default class TypoList extends Component {
     }
 
     render() {
-
-        const {typos} = this.props;
-
-        this.state.siteId = this.props.siteId;
-
         console.log("Render typolist for site " + this.state.siteId);
 
-        if (typos.length === 0 || this.state.resolvedTypos.length >= typos.length) {
+        this.updateSiteTyposCount();
+
+        const typos = this.props.typos;
+
+        if (typos.length === 0) {
             return TypoList._displayEmptyMessage();
         }
 
         const typoCards = typos.map((typo, index) =>
             <Typo key={typo.id} typo={typo}
-                  show={!this.state.resolvedTypos.includes(typo.id)}
                   acceptCallback={this.acceptCorrection.bind(this, typo.id)}
                   declineCallback={this.declineCorrection.bind(this, typo.id)}/>
         );
@@ -153,8 +155,7 @@ export default class TypoList extends Component {
      * Уменьшает счетчик опечаток сайта
      * @private
      */
-    _decrementSiteTyposCount() {
-        const value = parseInt($(`#${this.state.siteId}-typos-count`).text());
-        $(`#${this.state.siteId}-typos-count`).text(value-1);
+    updateSiteTyposCount() {
+        $(`#${this.state.siteId}-typos-count`).text(this.props.typos.length);
     }
 }

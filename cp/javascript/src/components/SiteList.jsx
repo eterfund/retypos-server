@@ -4,8 +4,9 @@ import TypoList from "./TypoList/";
 import FaRefresh from 'react-icons/lib/fa/refresh';
 import TopBarProgress from 'react-topbar-progress-indicator';
 
-export default class SiteList extends React.Component {
+const alertify = require("alertify.js");
 
+export default class SiteList extends React.Component {
     constructor(props) {
         super(props);
 
@@ -43,11 +44,14 @@ export default class SiteList extends React.Component {
 
         tab = tab === undefined ? this.state.activeTab : tab;
 
-        this.loadSiteTypos(tab, () =>
-            this.setState({
-                refreshing: false,
-                activeTab: tab
-            })
+        this.loadSiteTypos(tab, () => {
+                alertify.success("Опечатки обновлены");
+
+                this.setState({
+                    refreshing: false,
+                    activeTab: tab
+                });
+            }
         );
     }
 

@@ -14,6 +14,7 @@
     "react": "^16.3.2",
     "react-dom": "^16.3.0",
     "react-icons": "^2.2.7",
+    "react-topbar-progress-indicator": "^2.0.0",
     "reactstrap": "^5.0.0-beta.3",
     "whatwg-fetch": "^2.0.4"
   },

@@ -2,7 +2,7 @@ import React from 'react'
 import {Nav, NavItem, NavLink, TabContent, TabPane, Alert, Badge} from "reactstrap";
 import TypoList from "./TypoList/";
 import FaRefresh from 'react-icons/lib/fa/refresh';
-
+import TopBarProgress from 'react-topbar-progress-indicator';
 
 export default class SiteList extends React.Component {
 
@@ -13,28 +13,43 @@ export default class SiteList extends React.Component {
         this.state = {
             activeTab: 0,
             error: false,
+            refreshing: true
         };
 
         this.typos = [];
 
-        this.updateTyposForActiveSite();
+        // Настройка прогресс бара
+        TopBarProgress.config({
+            barColors: {
+                "0": "#ffc107",
+                "1.0": "#ffc107",
+            }
+        });
+
+        this.updateTab();
     }
 
-    updateTyposForActiveSite = () => {
-        this.loadSiteTypos(this.state.activeTab, () =>
-            this.forceUpdate()
+    /**
+     * Обновляет содержимое данной вкладки или текущей активной вкладки,
+     * если параметр не указан. Если указанная вкладка не является активной,
+     * то делает её активной.
+     *
+     * @param tab Если указан, то обновляет содержимое данной вкладки
+     */
+    updateTab = (tab) => {
+        this.setState({
+           refreshing: true
+        });
+
+        tab = tab === undefined ? this.state.activeTab : tab;
+
+        this.loadSiteTypos(tab, () =>
+            this.setState({
+                refreshing: false,
+                activeTab: tab
+            })
         );
     }
-
-    toggle = (tab) => {
-        if (this.state.activeTab !== tab) {
-            /* Обновляем стейт только после загрузки опечаток */
-            this.loadSiteTypos(tab, () => {
-                this.state.activeTab = tab;
-                this.forceUpdate();
-            })
-        }
-    };
 
     loadSiteTypos(siteId, done) {
         $.ajax({
@@ -59,7 +74,7 @@ export default class SiteList extends React.Component {
         const tabItems = this.sites.map((site, index) =>
             <NavItem key={index}>
                 <NavLink className={this.state.activeTab === index ? "active" : ""}
-                         onClick={() => { this.toggle(index) }}>
+                         onClick={() => { this.updateTab(index) }}>
                     {site.name}
 
                     <Badge id={site.id + "-typos-count"} className={"typos-count"}
@@ -67,9 +82,9 @@ export default class SiteList extends React.Component {
                         {this.typos.length}
                     </Badge>
                 </NavLink>
-                {this.state.activeTab === index ?
-                    <FaRefresh className="refresh-site" title="Обновить" onClick={this.updateTyposForActiveSite} /> :
-                    null}
+                {this.state.activeTab === index &&
+                    <FaRefresh className="refresh-site" title="Обновить"
+                               onClick={ () => { this.updateTab() } } />}
             </NavItem>
         );
 
@@ -107,6 +122,7 @@ export default class SiteList extends React.Component {
 
         return (
             <div>
+                {this.state.refreshing && <TopBarProgress />}
                 <Nav pills fill>
                     {tabItems}
                 </Nav>

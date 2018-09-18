@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Card, CardHeader, CardBody, CardText} from 'reactstrap'
+import TopBarProgress from 'react-topbar-progress-indicator';
 
 import Typo from "../Typo/";
 
@@ -13,6 +14,7 @@ const alertify = require("alertify.js");
 
 export default class TypoList extends Component {
     state = {
+        loading: false,
         siteId: 0,
         resolvedTypos: []
     };
@@ -25,25 +27,29 @@ export default class TypoList extends Component {
      * @param corrected Финальный вариант исправления
      */
     acceptCorrection(typoId, corrected) {
+        this.setState({
+            loading: true
+        });
+
         this._setTypoStatus(1, typoId, this.state.siteId, corrected)
             .done((response) => {
                 if (response.error === false) {
                     alertify.success(`<p>Опечатка ${typoId} была подтверждена.</p>
                         <p>Исправления применены к тексту, содержащему опечатку.</p>`);
 
-                    this.state.resolvedTypos.push(typoId)
+                    this.state.resolvedTypos.push(typoId);
                     this._decrementSiteTyposCount();
-                    this.forceUpdate();
-                    return true;
+                } else {
+                    alertify.error(response.message);
                 }
-
-                alertify.error(response.message);
-                return false;
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");
-                return false;
-            })
+            }).always(() => {
+                this.setState({
+                    loading: false
+                });
+            });
     }
 
     /**
@@ -53,19 +59,23 @@ export default class TypoList extends Component {
      * @param typoId Идентификатор опечатки.
      */
     declineCorrection(typoId) {
+        this.setState({
+            loading: true
+        });
+
         this._setTypoStatus(0, typoId, this.state.siteId)
             .done(() => {
                 alertify.success(`Опечатка ${typoId} была отклонена`);
                 
                 this.state.resolvedTypos.push(typoId);
                 this._decrementSiteTyposCount();
-                this.forceUpdate();
-
-                return true;
             })
             .fail(() => {
                 alertify.error("Ошибка исправления опечатки, попробуйте позже");
-                return false;
+            }).always(() => {
+                this.setState({
+                    loading: false
+                });
             });
     }
 
@@ -133,6 +143,7 @@ export default class TypoList extends Component {
 
         return (
             <div>
+                {this.state.loading && <TopBarProgress />}
                 {typoCards}
             </div>
         )

@@ -44,10 +44,9 @@ export default class Typo extends Component {
         console.log(result);
 
         let resultJson = await result.json();
-        const editUrl = resultJson.editUrl;
 
         // Задаем ссылку
-        element.href = editUrl;
+        element.href = resultJson.editUrl;
 
         return false;
     }
@@ -113,7 +112,7 @@ export default class Typo extends Component {
 
     render() {
         const typo = this.typo;
-        const {acceptCallback, declineCallback, show} = this.props;
+        const {show} = this.props;
 
         const display = show ? "d-block" : "d-none";
         const textColor = "text-white";
@@ -174,21 +173,11 @@ export default class Typo extends Component {
         );
     }
 
-    /**
-     * Hides typo card 
-     */
-    // hideTypoCard() {
-    //     $(`#typo-${this.typo.id}`).animate({
-    //         marginLeft: "3000px",
-    //         opacity: 0
-    //     }, 500);
-    // }
-
     applyCorrection = () => {
-        let success = this.acceptCallback(this.typo.correctedText);
+        this.acceptCallback(this.typo.correctedText);
     };
 
     declineCorrection = () => {
-        let success = this.declineCallback();
+        this.declineCallback();
     };
 }

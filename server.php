@@ -12,6 +12,7 @@ header('Access-Control-Allow-Origin: *');
 
 require_once('configuration.php');
 require_once('functions.php');
+require_once('dbfunctions.php');
 require_once('language.php');
 require_once('constants.php');
 
@@ -70,7 +71,6 @@ $userdata['url'] = getFormatingUrl(rawurldecode(getRequest('url', '')));
 $userdata['text'] = htmlspecialchars(rawurldecode(getRequest('text', '')));
 $userdata['context'] = htmlspecialchars(rawurldecode(getRequest('context', '')));
 
-/* Парсим сайт для получения коренного сайта */
 $mas_url = parse_url($userdata['url']);
 if (!isset($mas_url['host'])) {
     echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]["error_valid_url"]));
@@ -87,6 +87,7 @@ if (!isset($mas_url['host'])) {
 
 /* Достаем номер сайта и email-ы пользователей */
 try {
+/*
     $query_emails = "SELECT r.id_site AS id_site,
 	u.email AS email
 	FROM users AS u, responsible AS r
@@ -104,7 +105,19 @@ try {
     // 08.06.17: supports every protocol
     // ^(https?://)*(www.)*etersoft.com/?$
     $STH->execute(array("^(https?://)*(www.)*" . $mas_url["host"] . "/?$"));
+*/
+    $id_site = get_site_id($DBH, $userdata['url']);
+    $query_emails = "SELECT r.id_site AS id_site,
+	u.email AS email
+	FROM users AS u
+	INNER JOIN responsible AS r ON r.id_user = u.id
+        WHERE r.id_site = $id_site
+            AND r.status = '1'";
+    //error_log($query_emails);
+    $STH = $DBH->prepare($query_emails);
     
+    $STH->execute(array($id_site));
+
     if ($STH->rowCount() > 0) {
         $email_users = array();
         while ($row = $STH->fetch(PDO::FETCH_ASSOC)) {

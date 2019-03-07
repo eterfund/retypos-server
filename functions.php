@@ -173,4 +173,3 @@ function getFormatingUrl($url) {
 	return $url;
 }
 
-?>

@@ -27,4 +27,4 @@ $_language['ru']['mail_click_url'] = "нажмите";
 $_language['ru']['mail_comment'] = "Предложенное исправление";
 $_language['ru']['mail_context'] = "Контекст";
 $_language['ru']['mail_text'] = "Текст с опечаткой";
-?>
+

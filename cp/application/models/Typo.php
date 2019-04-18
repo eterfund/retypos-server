@@ -319,14 +319,58 @@ class Typo extends CI_Model {
      * @param string $link Ссылка на статью
      * @return string URL адаптера JSON RPC
      */
+private function get_site_id($DBH, $url) {
+    //error_log("\nurl: $url\n");
+    $mas_url = parse_url($url);
+    if (!isset($mas_url['host']))
+        return 0;
+    $host = $mas_url['host'];
+
+    $query_sites = "SELECT sites.id AS id, sites.site AS url FROM sites
+            WHERE sites.site REGEXP ?";
+
+    $query = $DBH->query($query_sites, array("^(https?://)*(www.)*" . $host . "/?"));
+//    if ($query->result() $result->rowCount() == 0) {
+//        error_log("no host $host");
+//        return 0;
+//    }
+
+    $max_id = 0;
+    $max_len = 0;
+    foreach ($query->result_array() as $row) {
+        //echo $row['id'] . " " . $row['url'] . " in " . $url . "\n";
+        //preg_match('/(foo)(bar)(baz)/', $row['url'] , $matches
+        // TODO: сравнивать строки, начиная с ://
+        $pos = strpos ($url, $row['url']);
+        $len = strlen($row['url']);
+        //echo "pos = $pos, len = $len\n";
+        if ($pos !== false && $max_len < $len) {
+            $max_id = $row['id'];
+            $max_len = $len;
+        }
+    }
+    //echo "Result: $max_id, $max_len\n";
+    return $max_id;
+}
+
+
     private function getTyposAdapterUrl(string $link) {
         $correctPath = $this->config->item("correction_path");
 
         /* Получаем адрес необходимого сайта */
         $parsed_url = parse_url($link);
+        //require_once("/home/eterfund/www/eterfund.ru/api/typos/dbfunctions.php");
+        $id_site = $this->get_site_id($this->db, $link);
 
+        $this->db->select("s.site as site");
+        $this->db->from("sites as s");
+        $this->db->where("s.id", $id_site);
+        $site = $this->db->get()->row();
+        //error_log("result: " . $site->site . "/" . $correctPath);
+        log_message("error", "result: " . $site->site . "/" . $correctPath);
+        return $site->site . "/" . $correctPath;
         // Адрес на который шлем запрос исправления
-        return $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
+        //return $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
     }
 
     /**

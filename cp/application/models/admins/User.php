@@ -171,6 +171,7 @@ class User extends CI_Model {
     }
     
     function editUser($data)  {
+        // TODO: дублирование проверки (см. addUser)
         if  (!$this->checkEmail($data['email'], $data['id_user']))  {
             return array('message' => 'Email не уникален');
         }
@@ -178,6 +179,7 @@ class User extends CI_Model {
             return array('message' => 'Логин не уникален');
         }
         
+        // TODO: странная проверка
         if  ($data['password'] != '******')  {
             $data['password'] = $this->userHelper->hashPassword($this->input->post('password'));
         }

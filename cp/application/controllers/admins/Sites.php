@@ -78,6 +78,8 @@ class Sites extends CI_Controller {
         
         if  ($oper == 'add')  { // Добавление пользователя
             $data['site'] = $this->input->post('site');
+            $path = $this->input->post('path');
+            $data['path'] = $path ? $path : null;
             if  ($data['site'] == '')  {
                 echo json_encode(array('message' => 'Название сайта некорректно'));
             }  else  {
@@ -90,6 +92,8 @@ class Sites extends CI_Controller {
         }  else if  ($oper == 'edit')  { // Редактирование пользователя
             $data['id_site'] = $this->input->post('id');
             $data['site'] = $this->input->post('site');
+            $path = $this->input->post('path');
+            $data['path'] = $path ? $path : null;
             if  ($data['site'] == '')  {
                 echo json_encode(array('message' => 'Название сайта некорректно'));
             }  else  {

@@ -366,9 +366,10 @@ private function get_site_id($DBH, $url) {
         $this->db->from("sites as s");
         $this->db->where("s.id", $id_site);
         $site = $this->db->get()->row();
+        $path = empty($site->path) ? $correctPath : $site->path;
         //error_log("result: " . $site->site . "/" . $correctPath);
-        log_message("error", "result: " . $site->site . "/" . $correctPath);
-        return $site->site . "/" . $correctPath;
+        log_message("error", "result: " . $site->site . "/" .  $path);
+        return $site->site . "/" . $path;
         // Адрес на который шлем запрос исправления
         //return $parsed_url["scheme"] . "://" . $parsed_url["host"] . "/" . $correctPath;
     }

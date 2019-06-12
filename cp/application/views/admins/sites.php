@@ -16,10 +16,11 @@ jQuery("#table_sites").jqGrid({ // Привязка плагина к табли
    	url: '<?=$base_url?>admins/sites/get_list_sites', // Скрипт - обработчик ваших запросов
    	editurl: '<?=$base_url?>admins/sites/panel_sites',
    	datatype: "json", // Формат скрипта-обработчика
-   	colNames:['Номер', 'Сайт', 'Дата регистрации'],
+   	colNames:['Номер', 'Сайт', 'Путь' , 'Дата регистрации'],
    	colModel:[
    		{name:"id", index:'s.id', width:10, searchtype:"integer", align:'center'},
-        {name:"site", index:'s.site', align:'center', width:20, searchtype:"string", editable:true, addtable:true, editrules:{required:true}},
+		{name:"site", index:'s.site', align:'center', width:20, searchtype:"string", editable:true, addtable:true, editrules:{required:true}},
+		{name:"path", index:'s.path', align:'center', width:20, searchtype:"string", editable:true, addtable:true},
         {name:"date", index:'s.date', align:'center', width:20, searchtype:"string"},
    	],
 

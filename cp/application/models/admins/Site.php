@@ -96,6 +96,7 @@ class Site extends CI_Model {
                 $data['rows'][$id]['id']     = $row->id;
                 $data['rows'][$id]['cell'][] = $row->id;
                 $data['rows'][$id]['cell'][] = $row->site;
+                $data['rows'][$id]['cell'][] = $row->path;
                 $data['rows'][$id]['cell'][] = $row->date;
             }
         } else if ( $table == 'users' ) {
@@ -125,6 +126,7 @@ class Site extends CI_Model {
         
         $data = array(
           'site' => $site['site'],
+          'path' => $site['path'],
           'date' => date("Y-m-d H:i:s", time())
         );
         
@@ -138,6 +140,7 @@ class Site extends CI_Model {
         }
         
         $this->db->set("site", $data['site']);
+        $this->db->set("path", $data['path']);
         $this->db->where("id", $data['id_site']);
         $this->db->update("sites");
     }

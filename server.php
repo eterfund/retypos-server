@@ -157,10 +157,7 @@ if ($email_users) {
 
     $reply_to = REPLY_TO;
 
-    if (sendMail($subject, $message_email, $to, $from_email, $from_name, $reply_to, 'html')) {
-        echoJsonData(array('success' => 'true', 'message' => $_language[$code_language]['text_success']));
-        return;
-    } else {
+    if (!sendMail($subject, $message_email, $to, $from_email, $from_name, $reply_to, 'html')) {
         echoJsonData(array('success' => 'false', 'message' => $_language[$code_language]['mail_error']));
         return;
     }
@@ -171,3 +168,6 @@ if ($email_users) {
     return;
 */
 }
+
+echoJsonData(array('success' => 'true', 'message' => $_language[$code_language]['text_success']));
+return;

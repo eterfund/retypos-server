@@ -129,7 +129,7 @@ class Site extends CI_Model {
           'path' => $site['path'],
           'date' => date("Y-m-d H:i:s", time())
         );
-        
+
         $this->db->insert('sites', $data);
     }
     
@@ -172,6 +172,7 @@ class Site extends CI_Model {
         $this->db->from("sites");
         
         $count = $this->db->count_all_results();
+        
         if  ($count == 0)  {
             return true;
         }  else  {

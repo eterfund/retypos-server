@@ -135,7 +135,7 @@ class Site extends CI_Model {
     
     /*Обновление названия*/
     function updateSite($data)  {
-        if (!$this->isSiteUnique($data['site']))  {
+        if (!$this->isSiteUnique($data['site'], $data['id_site']))  {
             return array('message' => 'Сайт не уникален');
         }
         
@@ -167,8 +167,9 @@ class Site extends CI_Model {
     }
     
     /*Проверяем сайт на уникальность*/
-    function isSiteUnique($site)  {
+    function isSiteUnique($site, $id = '')  {
         $this->db->where("site", $site);
+        $this->db->where('id !=', $id);
         $this->db->from("sites");
         
         $count = $this->db->count_all_results();

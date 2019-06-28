@@ -362,7 +362,7 @@ private function get_site_id($DBH, $url) {
         //require_once("/home/eterfund/www/eterfund.ru/api/typos/dbfunctions.php");
         $id_site = $this->get_site_id($this->db, $link);
 
-        $this->db->select("s.site as site");
+        $this->db->select("s.site as site, s.path as path");
         $this->db->from("sites as s");
         $this->db->where("s.id", $id_site);
         $site = $this->db->get()->row();
